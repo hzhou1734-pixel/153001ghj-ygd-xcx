@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="ATRfD2ldqtYAeVOlkEbRxA">
+<head data-page-node-id="Aq9eC1okWSgAzkYEkfnKSg">
+<meta charset="UTF-8" data-page-node-id="6NvHL0IaEy1K7o8DeHygyO">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="7PBfETPaCDAT33gjE157cD">
+<title>顾好家社区服务·员工端（微信小程序原型）</title>
+<style>
+:root{
+  --mint:#3AC99A;--mint-dark:#2FB287;--coral:#FF8A5C;--bg:#F6F7F9;
+  --card:#fff;--txt:#1C1F26;--sub:#8A93A3;--line:#EEF1F5;--blue:#4A90E2;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:-apple-system,'PingFang SC','Helvetica Neue','Microsoft YaHei',sans-serif;
+  background:linear-gradient(160deg,#E8F4EF,#DCE9F5);
+  min-height:100vh;overflow:auto;color:var(--txt);
+  padding:14px 0;
+  display:flex;
+}
+/* ===== 舞台：锁定 375×812 标准比例，视口不足时整体等比缩放，比例恒定不失调 ===== */
+/* margin:auto 在 flex 容器中实现水平+垂直双向居中，且内容超高时不会裁切顶部 */
+.stage{
+  width:375px;min-width:375px;margin:auto;
+  transform-origin:top center;
+}
+/* 窄屏（真机）去掉外边距，避免 375×812 视口下产生无意义的滚动 */
+@media (max-width:389px){body{padding:0}}
+/* ===== 手机壳：375×812（iPhone X / 微信小程序基准比例 1:2.165） ===== */
+.phone{
+  width:375px;min-width:375px;height:812px;
+  background:var(--bg);border-radius:44px;
+  box-shadow:0 24px 64px rgba(30,50,60,.25),0 0 0 11px #1C1F26,0 0 0 13px #3A3F47;
+  display:flex;flex-direction:column;overflow:hidden;position:relative;
+}
+.notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:118px;height:26px;background:#1C1F26;border-radius:15px;z-index:20}
+.statusbar{height:46px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 8px;font-size:14px;font-weight:600;background:#fff;position:relative;z-index:10}
+.statusbar .icons{display:flex;align-items:center;gap:5px}
+/* ===== 导航栏：与内容分离，固定不滚动；右上角胶囊按钮 ===== */
+.navbar{height:44px;flex:none;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--line);z-index:10}
+.nav-title{font-size:17px;font-weight:600}
+.nav-back{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;display:none;align-items:center;justify-content:center;border:none;background:none;cursor:pointer}
+.navbar.has-back .nav-back{display:flex}
+.capsule{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:87px;height:32px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.35);border-radius:16px;display:flex;align-items:center;color:#fff;z-index:11}
+.capsule .dots{flex:1;display:flex;align-items:center;justify-content:center;gap:3px}
+.capsule .dots i{width:4px;height:4px;border-radius:50%;background:#fff}
+.capsule .divider{width:1px;height:18px;background:rgba(255,255,255,.35)}
+.capsule .close{flex:1;display:flex;align-items:center;justify-content:center}
+.capsule .close i{width:14px;height:14px;border:1.6px solid #fff;border-radius:50%;position:relative;display:block}
+.capsule .close i::after{content:'';position:absolute;width:1.6px;height:9px;background:#fff;top:50%;left:50%;transform:translate(-50%,-50%)}
+/* ===== 页面容器：超出812px内容区上下滚动 ===== */
+.pages{flex:1;position:relative;overflow:hidden}
+.page{position:absolute;inset:0;display:none;background:var(--bg);overflow:hidden;flex-direction:column}
+.page::-webkit-scrollbar{display:none}
+.page.active{display:flex}
+.page-body{flex:1;overflow-y:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.page-body::-webkit-scrollbar{display:none}
+/* ===== 底部TabBar + Home Indicator 安全区 ===== */
+.tabbar{height:56px;flex:none;background:#fff;border-top:1px solid var(--line);display:flex;position:relative;z-index:10}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:var(--sub);cursor:pointer;background:none;border:none}
+.tab.active{color:var(--mint)}
+.tab svg{width:24px;height:24px}
+.home-indicator{height:30px;flex:none;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;z-index:10}
+.home-indicator i{width:134px;height:5px;border-radius:3px;background:#1C1F26}
+/* ===== 通用组件 ===== */
+.card{background:var(--card);border-radius:14px;box-shadow:0 1px 4px rgba(20,40,60,.05);margin:12px 12px 0;padding:14px}
+.card:last-child{margin-bottom:12px}
+.card-title{font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.card-title .more{font-size:12px;color:var(--sub);font-weight:400;cursor:pointer}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;line-height:1.5;font-weight:500}
+.tag.mint{background:rgba(58,201,154,.12);color:var(--mint)}
+.tag.coral{background:rgba(255,138,92,.14);color:var(--coral)}
+.tag.blue{background:rgba(74,144,226,.12);color:var(--blue)}
+.tag.gray{background:#EFF2F6;color:var(--sub)}
+.btn{height:44px;border-radius:22px;font-size:15px;font-weight:600;border:none;cursor:pointer;flex:1}
+.btn-primary{background:var(--mint);color:#fff}
+.btn-primary:active{background:var(--mint-dark)}
+.btn-primary:disabled{background:#B9C4CF;color:#fff;cursor:not-allowed}
+/* ===== 协议勾选 ===== */
+.agree{display:flex;align-items:flex-start;gap:7px;margin-top:14px;font-size:11px;color:var(--sub);cursor:pointer;user-select:none}
+.agree input{position:absolute;opacity:0;pointer-events:none}
+.agree-box{width:14px;height:14px;border:1.5px solid #C3CBD6;border-radius:3px;display:flex;align-items:center;justify-content:center;flex:none;background:#fff;transition:.2s;margin-top:1px}
+.agree input:checked + .agree-box{background:var(--mint);border-color:var(--mint)}
+.agree input:checked + .agree-box::after{content:'✓';color:#fff;font-size:11px;line-height:1;font-weight:700}
+.agree-text{flex:1;line-height:1.5}
+.agree-text a{color:var(--mint);text-decoration:none}
+.btn-outline{background:#fff;color:var(--txt);border:1px solid var(--line)}
+.btn-mint-line{background:rgba(58,201,154,.08);color:var(--mint);border:1px solid rgba(58,201,154,.4)}
+.bottom-bar{position:relative;flex:none;background:#fff;border-top:1px solid var(--line);padding:10px 14px 16px;display:flex;gap:10px;z-index:5;box-shadow:0 -4px 16px rgba(20,40,60,.04)}
+/* ===== P09 用户资料页 ===== */
+.profile-hero{background:linear-gradient(135deg,var(--mint),#63D8B6);padding:20px 16px;display:flex;align-items:center;gap:14px;color:#fff}
+.profile-hero .ph-av{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;flex:none}
+.profile-hero .ph-name{font-size:18px;font-weight:700;line-height:1.2}
+.profile-hero .ph-tag{display:inline-block;margin-top:7px;background:rgba(255,255,255,.26);border-radius:10px;padding:2px 9px;font-size:11px}
+.profile-hero .ph-sub{font-size:12px;opacity:.92;margin-top:7px}
+.set-item{display:flex;align-items:center;gap:10px;background:#fff;padding:13px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.set-item:last-child{border-bottom:none}
+.set-item:active{background:var(--bg)}
+.set-item .si-ico{width:27px;height:27px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none}
+.set-item .si-t{flex:1;font-size:14px;color:var(--txt)}
+.set-item .si-v{font-size:12px;color:var(--sub);flex:none}
+.set-item .si-arrow{color:#C3CBD6;flex:none;display:flex}
+.btn-danger{background:#FF5B5B;color:#fff}
+.btn-danger:active{background:#E94A4A}
+/* ===== 退出登录确认弹层 ===== */
+.confirm-mask{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:40}
+.confirm-mask.show{display:flex;animation:fadeIn .2s ease}
+.confirm-box{width:266px;background:#fff;border-radius:14px;overflow:hidden;text-align:center;animation:popIn .22s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.confirm-box .cb-t{padding:24px 18px 18px;font-size:15px;font-weight:600;line-height:1.55}
+.confirm-box .cb-b{display:flex;border-top:1px solid var(--line)}
+.confirm-box .cb-b button{flex:1;padding:13px;border:none;background:#fff;font-size:15px;cursor:pointer;font-family:inherit}
+.confirm-box .cb-b button:first-child{border-right:1px solid var(--line);color:var(--sub)}
+/* ===== P10/P11 协议富文本页 ===== */
+.doc{padding:16px 16px 26px;background:#fff;font-size:13px;line-height:1.9;color:#3A4150}
+.doc .doc-meta{font-size:11px;color:var(--sub);text-align:center;padding-bottom:13px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.doc h2{font-size:14px;font-weight:700;color:var(--txt);margin:20px 0 8px;padding-left:9px;border-left:3px solid var(--mint);line-height:1.45}
+.doc h2:first-of-type{margin-top:14px}
+.doc p{margin:0 0 9px;text-align:justify}
+.doc .doc-note{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--sub);line-height:1.75;margin-top:8px}
+.doc .doc-sign{margin-top:22px;padding-top:14px;border-top:1px dashed var(--line);font-size:12px;color:var(--sub);text-align:right;line-height:1.8}
+.confirm-box .cb-b button.ok{color:#FF5B5B;font-weight:600}
+.stat4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{text-align:center;cursor:pointer}
+.stat .num{font-size:17px;font-weight:700;color:var(--txt)}
+.stat .num.money{font-size:14px}
+.stat .num.money em{font-style:normal;font-size:10px;font-weight:600}
+.stat .lbl{font-size:11px;color:var(--sub);margin-top:3px}
+.stat-block{background:rgba(58,201,154,.06);border-radius:10px;padding:10px 4px;cursor:pointer}
+.stat-block:active{background:rgba(58,201,154,.14)}
+.search-box{display:flex;align-items:center;gap:6px;background:#F1F3F6;border-radius:10px;padding:8px 12px;margin:12px}
+.search-box input{flex:1;border:none;background:none;font-size:13px;outline:none;color:var(--txt)}
+.search-box input::placeholder{color:#AAB3C0}
+.search-box svg{flex:none}
+/* 订单列表项 */
+.order-item{background:#fff;border-radius:14px;margin:0 12px 10px;padding:12px 14px;box-shadow:0 1px 4px rgba(20,40,60,.05);cursor:pointer}
+.oi-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.oi-no{font-size:14px;font-weight:600}
+.oi-rows div{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:2.5px 0}
+.oi-rows span{color:var(--sub);flex:none}
+.oi-rows b{font-weight:500;text-align:right;word-break:break-all}
+.empty{display:none;text-align:center;padding:48px 0;color:var(--sub);font-size:13px}
+.empty svg{width:72px;height:72px;opacity:.45;margin-bottom:10px}
+/* 时间轴 */
+.timeline{position:relative;padding-left:20px}
+.timeline::before{content:'';position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.tl-item{position:relative;padding-bottom:16px}
+.tl-item:last-child{padding-bottom:2px}
+.tl-item::before{content:'';position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;background:#D5DCE4;border:2px solid #fff;box-shadow:0 0 0 1px #E5E9EF}
+.tl-item.done::before{background:var(--mint)}
+.tl-item .tl-t{font-size:13px;font-weight:600}
+.tl-item .tl-d{font-size:11px;color:var(--sub);margin-top:2px}
+/* 状态徽章 */
+.status-badge{display:inline-block;font-size:13px;font-weight:700;padding:5px 14px;border-radius:18px}
+.status-badge.wait{background:rgba(255,138,92,.14);color:var(--coral)}
+.status-badge.done{background:rgba(58,201,154,.14);color:var(--mint)}
+.status-badge.doing{background:rgba(74,144,226,.12);color:var(--blue)}
+/* 登录页 */
+.login-hero{background:linear-gradient(160deg,var(--mint),#63D8B6);padding:52px 0 38px;text-align:center;color:#fff}
+.logo-circle{width:76px;height:76px;border-radius:24px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;backdrop-filter:blur(6px)}
+.login-name{font-size:20px;font-weight:700;letter-spacing:1px}
+.login-sub{font-size:12px;opacity:.85;margin-top:6px}
+.login-body{padding:8px 24px 0}
+.login-tip{font-size:11px;color:var(--sub);background:#F1F3F6;border-radius:10px;padding:9px 12px;margin:14px 0 18px;line-height:1.6}
+.field{display:flex;align-items:center;gap:8px;background:#F1F3F6;border-radius:12px;padding:0 14px;height:48px;margin-bottom:14px}
+.field input{flex:1;border:none;background:none;font-size:14px;outline:none;min-width:0}
+.field input::placeholder{color:#AAB3C0}
+.field svg{flex:none}
+.code-btn{flex:none;border:none;background:var(--mint);color:#fff;font-size:12px;font-weight:600;border-radius:16px;padding:7px 12px;cursor:pointer}
+.code-btn:disabled{background:#B9C4CF}
+/* 需求列表 */
+.need-item{background:#fff;border-radius:14px;margin:0 12px 10px;padding:12px 14px;box-shadow:0 1px 4px rgba(20,40,60,.05);cursor:pointer;display:flex;align-items:center;gap:12px}
+.need-item .ni-main{flex:1;min-width:0}
+.need-item .ni-name{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.need-item .ni-sub{font-size:11px;color:var(--sub);margin-top:3px}
+/* 收益列表 */
+.rev-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.rev-item:last-child{border-bottom:none}
+.rev-item .ri-main{flex:1;min-width:0}
+.rev-item .ri-t{font-size:13px;font-weight:600}
+.rev-item .ri-s{font-size:11px;color:var(--sub);margin-top:2px}
+.rev-item .ri-amt{font-size:15px;font-weight:700}
+.rev-item .ri-amt em{font-style:normal;font-size:11px}
+/* 详情信息行 */
+.info-row{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:6px 0}
+.info-row span{color:var(--sub);flex:none}
+.info-row b{font-weight:500;text-align:right}
+.menu-line{background:#F8FAF9;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;margin-top:8px}
+.menu-line b{color:var(--mint-dark)}
+/* 图片宫格 & 视频 */
+.img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.img-ph{aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,#D8EFE6,#BFE3D5);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.video-ph{margin-top:10px;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,#2A3440,#3D4B5C);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.video-ph::after{content:'';position:absolute;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.25)}
+.video-ph .play{position:absolute;width:0;height:0;border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;z-index:2;margin-left:3px}
+/* 弹层 */
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:50}
+.overlay.show{display:flex}
+.sheet{width:100%;background:#fff;border-radius:20px 20px 0 0;padding:22px 18px 34px;text-align:center}
+.sheet h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.sheet .sub{font-size:12px;color:var(--sub);margin-bottom:18px}
+.cam-box{width:180px;height:180px;margin:0 auto 18px;border-radius:20px;background:linear-gradient(135deg,#2A3440,#3D4B5C);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.preview-box{width:180px;height:180px;margin:0 auto 18px;border-radius:20px;background:linear-gradient(135deg,#D8EFE6,#9EDCC6);display:flex;align-items:center;justify-content:center;position:relative}
+.preview-box .corner{position:absolute;width:20px;height:20px;border:2.5px solid var(--mint)}
+.preview-box .c1{top:10px;left:10px;border-right:none;border-bottom:none;border-radius:6px 0 0 0}
+.preview-box .c2{top:10px;right:10px;border-left:none;border-bottom:none;border-radius:0 6px 0 0}
+.preview-box .c3{bottom:10px;left:10px;border-right:none;border-top:none;border-radius:0 0 0 6px}
+.preview-box .c4{bottom:10px;right:10px;border-left:none;border-top:none;border-radius:0 0 6px 0}
+.toast{position:absolute;left:50%;bottom:130px;transform:translateX(-50%) translateY(8px);background:rgba(28,31,38,.88);color:#fff;font-size:13px;padding:9px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:99;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.filter-row{display:flex;gap:8px;align-items:center;margin:0 12px 12px}
+.filter-row input,.filter-row select{border:none;background:#fff;border-radius:10px;padding:8px 10px;font-size:12px;color:var(--txt);outline:none;box-shadow:0 1px 4px rgba(20,40,60,.05)}
+.filter-row input[type=date]{flex:1.1;min-width:0}
+.filter-row select{flex:1;min-width:0}
+/* ===== 自定义 Picker（点击触发底部 Sheet） ===== */
+.picker{flex:1;min-width:0;height:36px;border:none;background:#fff;border-radius:10px;padding:0 10px;font-size:12px;color:var(--txt);box-shadow:0 1px 4px rgba(20,40,60,.05);display:flex;align-items:center;justify-content:space-between;gap:6px;cursor:pointer}
+.picker span{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picker svg{flex:none;color:#AAB3C0}
+/* ===== 底部 Sheet 内容 ===== */
+.sheet.boardsheet{padding:0;text-align:left;animation:slideUp .25s ease}
+.sheet-hd{padding:16px 18px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.sheet-hd .hd-title{font-size:15px;font-weight:700}
+.sheet-hd .hd-close{background:none;border:none;padding:4px;font-size:13px;color:var(--sub);cursor:pointer}
+.sheet-cal-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 4px}
+.sheet-cal-nav .cal-tt{font-size:16px;font-weight:700}
+.sheet-cal-nav button{background:none;border:none;width:32px;height:32px;border-radius:8px;color:var(--sub);cursor:pointer}
+.sheet-cal-nav button:active{background:var(--line)}
+.sheet-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:6px 14px 12px}
+.sheet-cal .cal-wk{height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--sub);font-weight:600}
+.sheet-cal .cal-d{height:34px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--txt);border-radius:8px;cursor:pointer}
+.sheet-cal .cal-d.muted{visibility:hidden}
+.sheet-cal .cal-d:active{background:var(--line)}
+.sheet-cal .cal-d.sel{background:var(--mint);color:#fff;font-weight:700}
+.sheet-cal .cal-d.sel:active{background:var(--mint-dark)}
+.sheet-list{padding:6px 0}
+.sheet-list .lsi{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;font-size:14px;color:var(--txt);cursor:pointer}
+.sheet-list .lsi:active{background:var(--bg)}
+.sheet-list .lsi.sel{color:var(--mint);font-weight:600}
+.sheet-list .lsi .chk{color:var(--mint);font-weight:700;font-size:16px}
+.sheet-cancel{margin:8px 14px 18px;padding:12px;border-radius:12px;background:var(--bg);color:var(--txt);text-align:center;font-size:14px;cursor:pointer}
+.otabs{display:flex;background:#fff;padding:0 12px;gap:24px;border-bottom:1px solid var(--line)}
+.otab{border:none;background:none;font-size:14px;color:var(--sub);padding:11px 0;cursor:pointer;position:relative;font-weight:500}
+.otab.active{color:var(--txt);font-weight:700}
+.otab.active::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:22px;height:3px;border-radius:2px;background:var(--mint)}
+.list-wrap{padding-top:12px;padding-bottom:12px}
+.home-pad{padding-bottom:16px}
+</style>
+</head>
+<body data-page-node-id="d6Cv99F5yW8r7jmoHLyd9R">
+<div class="stage" data-page-node-id="DpgvRBWfgXUr34fCfpZHOF">
+<div class="phone" data-page-node-id="EJg1iE28NTr6HoQnms8EMt">
+  <div class="notch" data-page-node-id="g6Jw1Mfv8YInqdiF7RRKGW"></div>
+  <div class="statusbar" data-page-node-id="mh7wHOf79o7pUEhFEkl0ZS">
+    <span data-page-node-id="MgFK3tBaNPj1YrPc9sKaj4">9:41</span>
+    <span class="icons" data-page-node-id="i36fws8QARlPdF7rcsyURA">
+      <svg width="17" height="11" viewBox="0 0 17 11" fill="#1C1F26" data-page-node-id="j8cBk7RXHmBXpgcFQv0VOJ"><rect x="0" y="7" width="3" height="4" rx="1" data-page-node-id="NUCjDsj4ZTQmBWF1GEM1Rk"/><rect x="4.5" y="5" width="3" height="6" rx="1" data-page-node-id="GwpJVmdS5w121IRgiFPrN2"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" data-page-node-id="V9P6b4qzFEdKnT8bguBJ2H"/><rect x="13.5" y="0" width="3" height="11" rx="1" data-page-node-id="RRFboC7dvso13C74QEGOdO"/></svg>
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="#1C1F26" data-page-node-id="6urW5QdutNY6btbEoTpE1P"><path d="M7.5 9.2a1.4 1.4 0 100 2.8 1.4 1.4 0 000-2.8zM7.5 5.6c-1.7 0-3.2.7-4.3 1.8l1.4 1.4a4.1 4.1 0 015.8 0l1.4-1.4A6 6 0 007.5 5.6zM7.5 2C4.9 2 2.5 3 .8 4.7l1.4 1.4A8 8 0 017.5 3.9c2.1 0 4 .8 5.3 2.2l1.4-1.4A10 10 0 007.5 2z" transform="translate(0,-1.5)" data-page-node-id="4MApELIgYLC8rOwF33Fa8p"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" data-page-node-id="fkYHARez29Mr4yttSFxH30"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="#1C1F26" opacity=".4" data-page-node-id="2gM32VYtoWVSFTvjvh7dNq"/><rect x="2" y="2" width="15" height="8" rx="1.5" fill="#1C1F26" data-page-node-id="AbGRqXsS9LEbXdXyyDgZCF"/><rect x="22.7" y="3.8" width="2" height="4.4" rx="1" fill="#1C1F26" opacity=".4" data-page-node-id="qqDwOfiDwshyBY6rIm5MbZ"/></svg>
+    </span>
+  </div>
+  <div class="navbar" id="navbar" data-page-node-id="1mVzIVw90YgQtNDGlQVL5w">
+    <button class="nav-back" onclick="goBack()" aria-label="返回" data-page-node-id="Rx3jwpFuwaJRAmzprXkWWI">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#1C1F26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="4ewcUa3vEIX331ceIxunA5"><path d="M12.5 4L6.5 10l6 6" data-page-node-id="E3vMa4KSmfPJB9wdv8W8CT"/></svg>
+    </button>
+    <span class="nav-title" id="navTitle" data-page-node-id="LKOiLEUQ9i5XsjhKrzYfsA">账号登录</span>
+    <div class="capsule" data-page-node-id="7jCQPBWo4lGX5nRMZclgh0">
+      <span class="dots" data-page-node-id="ivqmBIg8z0Km5TJerEaMAY"><i data-page-node-id="LAxBF0mwYvdT5GjsOTsFYb"></i><i data-page-node-id="BqCuFRrj1hfkXy3GQB1Tgp"></i><i data-page-node-id="1kSSYZNVnGqGZNdUGEAizI"></i></span>
+      <span class="divider" data-page-node-id="4r7cB3YI6cdGhF2xwGJEns"></span>
+      <span class="close" data-page-node-id="5Nhh9UlowWv4xL8NFA1vre"><i data-page-node-id="KUqxWMsQoxtoHTNtQDEqN5"></i></span>
+    </div>
+  </div>
+
+  <div class="pages" data-page-node-id="E6fIHapbl7UJMMEgi9MNg0">
+<!--P01 登录页-->
+<section class="page" id="P01" data-page-node-id="swhqxtzdMk3ELQIG3usi5w">
+  <div class="page-body">
+  <div class="login-hero" data-page-node-id="6A7aNjpdDSWc1CDdAS6DQO">
+    <div class="logo-circle" data-page-node-id="rABz9wDTjIdI4lPjfnV0Sz">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="BbozD0J3AqQKf0svDGa26q"><path d="M3 11l9-7 9 7" data-page-node-id="CLL4eC6o1gaJQnM3JVVe3R"/><path d="M5.5 9.5V20h13V9.5" data-page-node-id="z90m8Y2BppmPjdoCteK1vU"/><path d="M10 20v-5h4v5" data-page-node-id="ZBilJzVcnVeF0mFC5fv7yf"/></svg>
+    </div>
+    <div class="login-name" data-page-node-id="082CAWz1CxojVhHwbaKfX2">顾好家社区服务</div>
+    <div class="login-sub" data-page-node-id="DhrOFX1QrOjTXHvzG7CUdk">员工端 · 楼栋管家工作台</div>
+  </div>
+  <div class="login-body" data-page-node-id="14Bp5y0LWQBsPykyPZjGIV">
+    <div class="login-tip" data-page-node-id="G87xCAY3fTsoMBfirnU8Nl">账号由物业后台统一添加，如无法登录请联系管理员</div>
+    <div class="field" data-page-node-id="7pskqytqm86GtLIPCE9Pkg">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="1.8" stroke-linecap="round" data-page-node-id="RZ96hFihSISGpeE6olkhEo"><rect x="5" y="3.5" width="14" height="17" rx="3.5" data-page-node-id="XOXrcVqFzFKVtL28W0eNMF"/><path d="M10.5 8h3" opacity=".7" data-page-node-id="CtrAPEVCnxtI2ERoYTB1ik"/><circle cx="12" cy="13.5" r="2.6" data-page-node-id="o6UxDboxDpd7u2KlukMXbV"/></svg>
+      <input id="loginPhone" type="tel" maxlength="11" placeholder="请输入手机号码" value="13812345001" oninput="this.value=this.value.replace(/\D/g,'')" data-page-node-id="J7ewLmxeHimfYeU3uzZ6Sh">
+    </div>
+    <div class="field" data-page-node-id="bpP9DG7J78JdwlL0DLiKwz">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="3daSy24rfYxGQpmh475CoB"><path d="M12 3l7 3v5c0 4.4-3 8.4-7 9.5-4-1.1-7-5.1-7-9.5V6z" data-page-node-id="vzKpA503OeyGNaBpCVGEf0"/><path d="M9.2 12l2 2 3.6-3.8" data-page-node-id="YMGsmXn0Ig4tZTZA43e1MH"/></svg>
+      <input id="loginCode" type="text" maxlength="6" placeholder="请输入验证码" oninput="this.value=this.value.replace(/\D/g,'')" data-page-node-id="fXlOrbnL7S2o7zUxYG9jEL">
+      <button class="code-btn" id="codeBtn" onclick="sendCode(this)" data-page-node-id="i6Dj2S9zXsVXR2zz6kR9sS">获取验证码</button>
+    </div>
+    <button class="btn btn-primary" style="width:100%" id="loginBtn" onclick="doLogin()" disabled>登 录</button>
+    <label class="agree">
+      <input type="checkbox" id="agree" onchange="toggleAgree()">
+      <span class="agree-box"></span>
+      <span class="agree-text">我已阅读并同意<a href="javascript:void(0)" onclick="openAgreement('P10')">《用户服务协议》</a>与<a href="javascript:void(0)" onclick="openAgreement('P11')">《隐私政策》</a></span>
+    </label>
+  </div>
+  </div>
+</section>
+
+<!--P02 首页-->
+<section class="page" id="P02" data-page-node-id="0e6M907sroY7i7Ur2YtRwh">
+  <div class="page-body">
+  <div class="list-wrap home-pad" data-page-node-id="nwknwRTDDvpk34kryhSKl2">
+  <div class="card" style="margin-top:12px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('P09')" data-page-node-id="H9Qfv8pDWCztgOl1aHPRCV">
+    <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--mint),#63D8B6);display:flex;align-items:center;justify-content:center;flex:none" data-page-node-id="uCPKocuz3JnOjtZsyk9WWB">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" data-page-node-id="bb2D8p2RtRjFpnXbm8DdmC"><circle cx="12" cy="8.5" r="3.6" data-page-node-id="gnRW4wZc4u1L76AxjDeWH2"/><path d="M5 20c.8-3.4 3.6-5.4 7-5.4s6.2 2 7 5.4" data-page-node-id="IGE30y7UmIrFbn1lK2olLM"/></svg>
+    </div>
+    <div style="flex:1;min-width:0" data-page-node-id="886ADa2F6ZLe03Neg7rRbZ">
+      <div style="display:flex;align-items:center;gap:8px" data-page-node-id="8Azn4pOiSR3M1RaoWuSiDR"><b style="font-size:16px" data-page-node-id="KF1uynn8a4GtFqjEiWRY8S">管家小顾</b><span class="tag mint" data-page-node-id="NujnETPMlIdaFVeQWVqUK7">楼栋管家</span></div>
+      <div style="font-size:12px;color:var(--sub);margin-top:3px" data-page-node-id="nxdoPKe3zDgWsFvvot2pEk">138 1234 5001 · 幸福里小区</div>
+    </div>
+  </div>
+
+  <div class="card" data-page-node-id="VoiRl6ba0DKK8pRo5Ew3cC">
+    <div class="card-title" data-page-node-id="RqbbZGwK0hkkqLlNsyu4AP">我的收益<span class="more" onclick="go('P03')" data-page-node-id="83d34qyjaTjG0tDesC4uMX">收益明细 ›</span></div>
+    <div class="stat4" data-page-node-id="ZZpUbUpUC0DjGWfEm4RkXB">
+      <div class="stat" data-page-node-id="vPcK1AZ9TTcbDx3020Dani"><div class="num money" data-page-node-id="JkmufrwtnNCdEiSntvZNRv"><em data-page-node-id="vbFShSJCR2xpr7EKhvrTMt">¥</em>3,286.50</div><div class="lbl" data-page-node-id="A4I0DTq3LKGYQwnEwRDeF1">累计收益</div></div>
+      <div class="stat" data-page-node-id="Pz1XwfdcqQ6jQb0IyUo42P"><div class="num money" style="color:var(--mint)" data-page-node-id="CdV0BhBfV64Xnla7cqeanG"><em data-page-node-id="C0rVJLypK8sjsMVRArIQww">¥</em>2,560.00</div><div class="lbl" data-page-node-id="lm0UIJ6aCLbQOUg6sXkBpI">已发放</div></div>
+      <div class="stat" data-page-node-id="MuP7tRuKmQOQzRnWYQJBfP"><div class="num money" style="color:var(--coral)" data-page-node-id="kBa3DfoS3l3HyBSqDkTwfT"><em data-page-node-id="Y2HQNWSOaOwTttgXHyRMjO">¥</em>726.50</div><div class="lbl" data-page-node-id="g7IldtyLQxE5zxssWdlyf8">未发放</div></div>
+      <div class="stat" data-page-node-id="VfoEon69Woe4BYGRnX7n0S"><div class="num money" data-page-node-id="iz08FsEaC6wiTQDWcpzNX0"><em data-page-node-id="MhQBwfdHEGR6vPhAjt8CmR">¥</em>612.00</div><div class="lbl" data-page-node-id="fPmBcNWPgA72irZ6TkXBhY">本月收益</div></div>
+    </div>
+  </div>
+
+  <div class="card" data-page-node-id="iOhZ8fLaOIFiOb0eW2SBAd">
+    <div class="card-title" data-page-node-id="VeKTNd8U3j1Du5R5FeU6Br">订单概览</div>
+    <div class="stat3" data-page-node-id="J62m2xC92rZ0BjFv9e6cI8">
+      <div class="stat-block" onclick="go('P05','baocan')" data-page-node-id="smMjX1b8k08fMHIFAZDMQk"><div class="num" data-page-node-id="kyCC4cAIaSPzbCk24CULuB">128</div><div class="lbl" data-page-node-id="pEKvTPzhUe8kzlDjJTr4xS">膳食配送</div></div>
+      <div class="stat-block" onclick="go('P05','peizhen')" data-page-node-id="yKZhKhvuHg7mY07etQoagH"><div class="num" data-page-node-id="cPoIIMIq58ZAp4IvKnyvJb">46</div><div class="lbl" data-page-node-id="leutI0TmDSfJRfcvO857u2">陪诊服务</div></div>
+      <div class="stat-block" onclick="go('P05','tuoguan')" data-page-node-id="34FUlVKwnogO1svLNnSjZZ"><div class="num" data-page-node-id="CPJaevxteFyOFtwF6PdfXY">23</div><div class="lbl" data-page-node-id="dzzmJTvTnCS2Ev3pMwhmZy">托管接送</div></div>
+    </div>
+  </div>
+
+  <div class="card" data-page-node-id="3q1S7S74EFKY4a9jOsViFF">
+    <div class="card-title" data-page-node-id="LcVaXuOTmg6cuBOlAfVg4m">今日待办</div>
+    <div class="stat2" data-page-node-id="xeJQNdDR1SxFhBIOy4d8yQ">
+      <div class="stat-block" onclick="go('P05','baocan')" data-page-node-id="RSp3PjOMlU8UCu881HXWun"><div class="num" style="color:var(--coral)" data-page-node-id="l5yc2X7W4h4S7hCIwAB072">6</div><div class="lbl" data-page-node-id="ly3AiGqOSUl9jTmzj50uUh">膳食待配送</div></div>
+      <div class="stat-block" onclick="go('P05','peizhen')" data-page-node-id="ZpyEI5RCVzWU22EciQ0nYh"><div class="num" style="color:var(--coral)" data-page-node-id="vGW2Ay0lDqM5xfBzotcOIv">2</div><div class="lbl" data-page-node-id="VUqYHiSrEvV9TzkSWCrqoS">陪诊服务</div></div>
+    </div>
+    <div style="font-size:10px;color:#B0B8C4;margin-top:8px" data-page-node-id="Xo25ZPd7bIvQSSCdKtINls">注：托管接送订单不属于当天服务订单，不列入今日待办</div>
+  </div>
+
+  <div style="margin:12px 12px 0;display:flex;align-items:center;justify-content:space-between" data-page-node-id="k7b8nyh3peBBCUPRv0YVuL">
+    <b style="font-size:15px" data-page-node-id="IU4hwrcPF1RaxaWoKWGYPB">生活帮手需求</b>
+    <span style="font-size:11px;color:var(--sub)" data-page-node-id="POisuA1KsC6IYLGgXiCKUB">仅显示本楼栋需求</span>
+  </div>
+  <div class="search-box" style="margin:10px 12px" data-page-node-id="61ysAfoMYh22v8t5PRMPHM">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" data-page-node-id="x9dMUICtTPYFbJNa8aLsvU"><circle cx="11" cy="11" r="7" data-page-node-id="hQVfoGyH4dT8qBBN819VV3"/><path d="M20 20l-3.8-3.8" data-page-node-id="ZepddlIY8TEFk6u77KinXD"/></svg>
+    <input type="text" placeholder="输入联系人名称或电话搜索" oninput="filterNeeds(this.value)" data-page-node-id="dAmoS13kRxWj6HgX7p6dVM">
+  </div>
+  <div id="needList" data-page-node-id="GibJKPQNI8JgKc7dFPHda8">
+    <div class="need-item" data-k="王秀兰 501 13812345001" onclick="go('P04')" data-page-node-id="lrpfRwxGwHV1MveWYIyMB0">
+      <div class="ni-main" data-page-node-id="CU6y2pgUnJSgngUiJVVyML">
+        <div class="ni-name" data-page-node-id="YCyg3sDCqc3HFHrEHsIwpH">王秀兰 <span class="tag coral" data-page-node-id="8oOAEP2X5wRW8h9eAMMdmx">保洁维修</span></div>
+        <div class="ni-sub" data-page-node-id="iNRCu1pIcunDufBwblHQpH">3栋2单元501 · 2026-09-09 10:24</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C3CBD6" stroke-width="2" stroke-linecap="round" data-page-node-id="vmlGtBfY4zvLi78M29ADgz"><path d="M9 6l6 6-6 6" data-page-node-id="De9ZFMCCfbBEVK8ir4uBql"/></svg>
+    </div>
+    <div class="need-item" data-k="陈志强 502 13812345002" onclick="go('P04')" data-page-node-id="2m1EnUuctLu0hk2QsKAeqb">
+      <div class="ni-main" data-page-node-id="u2YyaeD3ILm0hE9TQEI2e2">
+        <div class="ni-name" data-page-node-id="P4XW6J9hy1KAuU5lA6fiDW">陈志强 <span class="tag blue" data-page-node-id="QxTc6x4CSZOxoUKIwNcH24">生活代办</span></div>
+        <div class="ni-sub" data-page-node-id="kNSOqu1Hd2fdVwa2mJyZem">3栋2单元502 · 2026-09-09 09:12</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C3CBD6" stroke-width="2" stroke-linecap="round" data-page-node-id="lHe2E4DvxJFKz6f50pEEde"><path d="M9 6l6 6-6 6" data-page-node-id="abT0O34rhspwxPJuDIOSRx"/></svg>
+    </div>
+    <div class="need-item" data-k="李桂芳 503 13812345003" onclick="go('P04')" data-page-node-id="y1yER1EFCGfjXdotlzVqis">
+      <div class="ni-main" data-page-node-id="BfDJCFYTcuJGdIKMwnAvUm">
+        <div class="ni-name" data-page-node-id="mxFMull2N2b8GGKtjm91An">李桂芳 <span class="tag mint" data-page-node-id="CDo9coSo4GBT69y6CZVoF4">家电器材</span></div>
+        <div class="ni-sub" data-page-node-id="aJb6hF3qdSQTe9LHBoLvYa">3栋2单元503 · 2026-09-08 18:47</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C3CBD6" stroke-width="2" stroke-linecap="round" data-page-node-id="1Ao3BzFYLUNWOHkIctkQ1c"><path d="M9 6l6 6-6 6" data-page-node-id="nSxfhuzS5tcDrFl2WlsBxg"/></svg>
+    </div>
+    <div class="need-item" data-k="赵敏 504 13812345004" onclick="go('P04')" data-page-node-id="VNedQCYzvUSpM0BtwPswL5">
+      <div class="ni-main" data-page-node-id="t0Q7W5enPmkHFf0eDT74j3">
+        <div class="ni-name" data-page-node-id="OAPr9xLDYaYgAgFnAPasKG">赵敏 <span class="tag coral" data-page-node-id="zvD4Db1KiSTeWoBSRsCwD3">保洁维修</span></div>
+        <div class="ni-sub" data-page-node-id="vwfHkGbiNX8MH4ZT3iuoSQ">3栋2单元504 · 2026-09-08 15:05</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C3CBD6" stroke-width="2" stroke-linecap="round" data-page-node-id="fDDWxjn1wppos7aKJ6fKXZ"><path d="M9 6l6 6-6 6" data-page-node-id="3Rc0Zpfbasy0TNnUMhaswF"/></svg>
+    </div>
+  </div>
+  <div class="empty" id="needEmpty" data-page-node-id="5ablqQArBtKwrc6sbvr8DR">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#B0B8C4" stroke-width="1.4" stroke-linecap="round" data-page-node-id="J2KNuCZJqfnMHPNsJm0qBo"><circle cx="11" cy="11" r="7" data-page-node-id="KVBEBQrNYk3EICrG6NKhqf"/><path d="M20 20l-3.8-3.8M8.5 11h5" data-page-node-id="FAdIscejv8XTBu8voeAVfD"/></svg>
+    <div data-page-node-id="3aKzFq3DL2IdH25BucgqtS">暂无相关需求</div>
+  </div>
+  </div>
+  </div>
+</section>
+
+<!--P03 收益明细-->
+<section class="page" id="P03" data-page-node-id="Zvu5Jj8tp4RDXV1zgZhjRB">
+  <div class="page-body">
+  <div style="background:linear-gradient(160deg,var(--mint),#63D8B6);padding:18px 18px 16px;color:#fff" data-page-node-id="Mdu7vK5iNtDbYOVgn8fo7k">
+    <div style="font-size:12px;opacity:.85" data-page-node-id="mtZRdHwyhg05uVZ8fBCHP8">累计收益（元）</div>
+    <div style="font-size:28px;font-weight:800;margin-top:4px" data-page-node-id="h1B1BqTeD4W9uEeb8my0uL">3,286.50</div>
+    <div style="display:flex;gap:22px;margin-top:8px;font-size:11px;opacity:.9" data-page-node-id="oIcW8S6Sg9kReNoKbJU9FA">
+      <span data-page-node-id="sKNpsDLF4zF6r6BgdT9meY">已发放 ¥2,560.00</span><span data-page-node-id="Dq2jT0OpJwfkmDMqfH13TA">未发放 ¥726.50</span>
+    </div>
+  </div>
+  <div class="filter-row">
+    <button class="picker" id="dateBtn" onclick="openSheet('date')">
+      <span id="dateText">2026-09-01</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+    </button>
+    <button class="picker" id="typeBtn" onclick="openSheet('type')">
+      <span id="typeText">全部类型</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+  </div>
+  <div class="card" id="revList" data-page-node-id="vKPkWF7WxukQ1N1H83mow2"></div>
+  <div class="empty" id="revEmpty" data-page-node-id="si9T3gimfR0hB5OCbuoApc">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#B0B8C4" stroke-width="1.4" stroke-linecap="round" data-page-node-id="VOdFJR6zjV7VGGfGVw3DWG"><rect x="4" y="3" width="16" height="18" rx="3" data-page-node-id="5i8aMLfpj6DIoNMBoMlqRo"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4.5" data-page-node-id="iwa42FxYdQIxvhAgyCatKj"/></svg>
+    <div data-page-node-id="1o2gINHD3eQ9FsrtNxxILZ">暂无相关记录</div>
+  </div>
+
+  </div>
+</section>
+
+<!--P04 需求详情-->
+<section class="page" id="P04" data-page-node-id="MEnSSA5rDuboREFw0adiHy">
+  <div class="page-body">
+  <div class="card" data-page-node-id="Txltqle8HiysT1agITlx1s">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px" data-page-node-id="a058HK9qzI1TQzejJiVQO3">
+      <span class="tag coral" data-page-node-id="p4Y4sfOHv2Ijyu8q78Np02">保洁维修</span>
+      <b style="font-size:15px" data-page-node-id="soDE940C47GqJaACkqTdy6">需求情况</b>
+    </div>
+    <div style="font-size:13px;line-height:1.7;color:#3A4150" data-page-node-id="bufD0WQz9yhF9leshA5Laq">家中厨房水龙头漏水，拧不紧，需要维修师傅上门查看更换配件。工作日上午都有人在家，随时可以上门。</div>
+    <div class="img-grid" data-page-node-id="k36TeFiuPCgBdssrE0bqFK">
+      <div class="img-ph" onclick="toast('图片全屏预览')" data-page-node-id="bjTDBQxesZjJ9HYJmbzBeg"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7FC9AD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="jllbWv8jDz6hdnsI7w1ayQ"><rect x="3" y="4.5" width="18" height="15" rx="2.5" data-page-node-id="BEuCMEYGw3PZ9Imn4KO8j4"/><circle cx="9" cy="10" r="1.8" data-page-node-id="N3ty9zFMfbDBWD5mVbzkNP"/><path d="M3.5 17l5-4.5 4 3.5 4.5-4.5 3.5 3.5" data-page-node-id="AW7LAPemyHakNLtVOi9m6h"/></svg></div>
+      <div class="img-ph" onclick="toast('图片全屏预览')" data-page-node-id="SNOnciqEG6p1kzgNaC6pPk"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7FC9AD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="L5wewBviejXdnuHN6YRFvc"><rect x="3" y="4.5" width="18" height="15" rx="2.5" data-page-node-id="QiQ94BSABbGqp1pDRSA6GL"/><circle cx="15" cy="10" r="1.8" data-page-node-id="XDRdUiTiJlFGasXMhOBoA5"/><path d="M3.5 17l5-4.5 4 3.5 4.5-4.5 3.5 3.5" data-page-node-id="i9SDmZJE8bYlsSnnW5oXDK"/></svg></div>
+      <div class="img-ph" onclick="toast('图片全屏预览')" data-page-node-id="nr3latA8VpPDVYNkq7b4V7"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7FC9AD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="XvdWmaLZxst68fSSPcpEab"><rect x="3" y="4.5" width="18" height="15" rx="2.5" data-page-node-id="6KSRCdrQcbzI0ZM3LHc1Nj"/><path d="M3.5 17l5-4.5 4 3.5 4.5-4.5 3.5 3.5" data-page-node-id="cc7XOQ3wT6fApQL7PBSwTZ"/></svg></div>
+    </div>
+    <div class="video-ph" onclick="toast('播放现场视频')" data-page-node-id="FzsRLfOe4CixMDJp0pmbMd"><span class="play" data-page-node-id="I9oaMz0gUbkjzAwAVvSawl"></span></div>
+  </div>
+  <div class="card" data-page-node-id="fxamCvMndJo4TfGAVYVBpK">
+    <div class="card-title" data-page-node-id="Ax1MKiViZk6uQEDHJQGEGc">提交人信息</div>
+    <div class="info-row" data-page-node-id="IHe1Py98cGKERDFT6NS3Ew"><span data-page-node-id="PvWEaMblxqm1GFClgtDvmy">提交人</span><b data-page-node-id="AmbSnvOGhwrQEGMgpUDC04">王秀兰</b></div>
+    <div class="info-row" data-page-node-id="GUa2m8GQXoTEklDCY6zg87"><span data-page-node-id="nl9112oexyqxXC81INQ77W">房号</span><b data-page-node-id="h56mkbFPZB5OOt3jU4xSq0">3栋2单元501</b></div>
+    <div class="info-row" data-page-node-id="j3ohzfNBEYPzPCPdEDVAxc"><span data-page-node-id="APpo4XSlbBzn0xZmSz7gg5">联系号码</span><b data-page-node-id="NhGhCdT6rTlWKV3CEnCzIc">138****5001</b></div>
+    <div class="info-row" data-page-node-id="RjHcns03iJp2x8JVCcaZZc"><span data-page-node-id="7O11EPgZsieDhqDRXCHMJL">提交时间</span><b data-page-node-id="92ZVH6ZCBtmALbpAZ1QsAv">2026-09-09 10:24</b></div>
+  </div>
+    </div>
+  <div class="bottom-bar" data-page-node-id="F6IW8EFgg0EkZFpROMMluW">
+    <button class="btn btn-outline" onclick="toast('已调起拨号：138****5001')" data-page-node-id="LBRKPqpMYRlxuD27YS8vPD">联系业主</button>
+  </div>
+</section>
+
+<!--P05 订单列表-->
+<section class="page" id="P05" data-page-node-id="c1Y8zvfy5z96lhtP3gdru9">
+  <div class="page-body">
+  <div class="otabs" data-page-node-id="QGt0u4zRpxIrSqFGxJ85Pe">
+    <button class="otab active" data-type="baocan" onclick="switchOrder('baocan')" data-page-node-id="qbUCPzIyLdNWMuzpody97a">报餐单</button>
+    <button class="otab" data-type="tuoguan" onclick="switchOrder('tuoguan')" data-page-node-id="MYIF8m0vspRBxg2EJpYAAd">托管单</button>
+    <button class="otab" data-type="peizhen" onclick="switchOrder('peizhen')" data-page-node-id="iW5zAH33HC8vzZNKvNT6cQ">陪诊单</button>
+  </div>
+  <div class="search-box" style="margin-top:12px" data-page-node-id="mDKBBvAYhGJnVyBae666iQ">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" data-page-node-id="Ya3RRMcxGG7VDA28EuAcxr"><circle cx="11" cy="11" r="7" data-page-node-id="H75bC0uuC5zogcLwYqBCoA"/><path d="M20 20l-3.8-3.8" data-page-node-id="RNiF6sygBgbeIUlvoxV4nL"/></svg>
+    <input id="orderSearch" type="text" placeholder="搜索订单号、联系人或房号" oninput="filterOrders(this.value)" data-page-node-id="pYq7cxq9nvUpqbbSEjeeFl">
+  </div>
+  <div id="orderList" class="list-wrap" data-page-node-id="dEFHvrqXjItG7QTe7fPXFH"></div>
+  <div class="empty" id="orderEmpty" data-page-node-id="VrRsiChujLm7t1ENRYpyAJ"><svg viewBox="0 0 24 24" fill="none" stroke="#B0B8C4" stroke-width="1.4" stroke-linecap="round" data-page-node-id="6uZrGKUaO2FqYFHHNtrE6M"><rect x="4" y="3" width="16" height="18" rx="3" data-page-node-id="ONYAl6JpcdsQxTLTCgOYM6"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4.5" data-page-node-id="RYaTyTkcxWzmuMEIl1JzUo"/></svg><div data-page-node-id="9gZJmytQ6SMTEGeCaDCeYt">暂无相关订单</div></div>
+  </div>
+</section>
+
+<!--P06 报餐单详情-->
+<section class="page" id="P06" data-page-node-id="xwHZuZTgDFtcMvRDHwEkKc">
+  <div class="page-body">
+  <div class="card" style="text-align:center;padding:18px 14px" data-page-node-id="W43m0W8HieQfex1dVEVCQU">
+    <div class="status-badge wait" id="mealStatus" data-page-node-id="bP7UsFAb6rPtYkEckYEyfO">待配送</div>
+    <div style="font-size:12px;color:var(--sub);margin-top:8px" data-page-node-id="DoPiFc9Z7cCXjN7mkJDy7t">订单编号</div>
+    <div style="font-size:16px;font-weight:700;margin-top:3px" data-page-node-id="AndazVoy6kvK1ZP5Yk9Yxc">GHJ20260909-001</div>
+  </div>
+  <div class="card" data-page-node-id="vtMgAyOjJNSfoRrNBjDGtR"><div class="card-title" data-page-node-id="nwvD4apcoahXY38dHoUnnr">配送信息</div><div class="info-row" data-page-node-id="e2gJXfTUtyBFbSOnkirrXi"><span data-page-node-id="hIhb67ueRYthyduAN4LZ7j">服务日期</span><b data-page-node-id="j71hI7gI64BZ7Rojj89ugf">2026-09-09（周三）</b></div><div class="info-row" data-page-node-id="d5hyLASx4MUOV1v8wCKB1C"><span data-page-node-id="H1sVH5r8Go7qYGpAbwZxfd">配送时段</span><b data-page-node-id="4QG2APUS1bZ2NAnfYutBhx">11:00 - 12:30</b></div><div class="info-row" data-page-node-id="bGgtM6VbFIQvyaP6b4fkF1"><span data-page-node-id="NPg1yXsZSalExKfL5XoVOC">配送地址</span><b data-page-node-id="j32BpPqF5hkj1r6a6QSU4m">幸福里小区3栋2单元501</b></div><div class="info-row" data-page-node-id="ad3zi8bJuDX760nFbupGRE"><span data-page-node-id="PF3VE3B0U7GjLBFtMijYsq">联系人</span><b data-page-node-id="P2FzWOhe7h6nMoyNCym9x1">王秀兰　138****5001</b></div><div class="menu-line" data-page-node-id="CBdmEkPyjrOE9PbdKrmseV"><b data-page-node-id="fKKeYwPoLit4pplDwn7zZ2">餐品明细</b><br data-page-node-id="U5cL6GhDoa7M8yZE8K5R2y">营养午餐 × 1　|　低盐软食<br data-page-node-id="3hbIHgKJVd3pzVn9cS4XN1">备注：放在门口餐柜，敲门后离开</div></div>
+  <div class="card" data-page-node-id="RhA0WStkfuihayyE94MRPp"><div class="card-title" data-page-node-id="z9eZtTlpJq45XIiJVo61ZV">订单进度</div><div class="timeline" data-page-node-id="M4DaE8ynPdtXBOCtcioBt1"><div class="tl-item done" data-page-node-id="YiacEvcBgxhUUxYvmTbDzQ"><div class="tl-t" data-page-node-id="Bd9FcPGPtEMSmn6Icgwymh">订单已确认</div><div class="tl-d" data-page-node-id="FujG8Qou2otek7nESCRLLb">09-09 08:10</div></div><div class="tl-item done" data-page-node-id="OdzeXRESzUITC0Qb3Jp30g"><div class="tl-t" data-page-node-id="VweyeHHr9n8shOwgLULCnj">餐品已备好</div><div class="tl-d" data-page-node-id="fCsjKH7bf1q0GwPnScK57F">09-09 10:20</div></div><div class="tl-item" id="mealTimeline" data-page-node-id="EYDd57Nf5M6ubBtksfsCIi"><div class="tl-t" data-page-node-id="ktd5vEMTMGNWgH6f1aaWFl">等待配送完成</div><div class="tl-d" data-page-node-id="4GGlSk6wtKqr0LDz8G3NC1">请完成配送后拍照确认</div></div></div></div>
+    </div>
+  <div class="bottom-bar" data-page-node-id="s8ZgOpF8rrtjkDlp6G0yRs"><button class="btn btn-outline" onclick="toast('已调起拨号：138****5001')" data-page-node-id="C91azTuQfdUUNkXlyUKEJ2">一键拨号</button><button class="btn btn-primary" id="mealAction" onclick="openPhoto('meal')" data-page-node-id="h7m37CbifVBirxzicz99En">拍照确认配送</button></div>
+</section>
+
+<!--P07 托管单详情-->
+<section class="page" id="P07" data-page-node-id="kta4ru2Mb9SZztypyyybzD">
+  <div class="page-body">
+  <div class="card" style="text-align:center;padding:18px 14px" data-page-node-id="84NtbrGdBkBRQ4pvio4NCo"><div class="status-badge doing" data-page-node-id="y6chCzpvUMOuqqGvjMPWoH">进行中</div><div style="font-size:12px;color:var(--sub);margin-top:8px" data-page-node-id="SgvmtNOR0BSiOQdccaPxsd">订单编号</div><div style="font-size:16px;font-weight:700;margin-top:3px" data-page-node-id="18O8DkA75OWJ2rAWtuoSqW">GHJ20260909-003</div></div>
+  <div class="card" data-page-node-id="lOMl7oNxpU128ptFr8D7VB"><div class="card-title" data-page-node-id="sFJVqu1Bf8aj7zjyzQliEW">托管接送信息</div><div class="info-row" data-page-node-id="9LhFXfu1qw5CUDEodnLh9W"><span data-page-node-id="PzweSDO24neVR7Od5ozMAM">儿童姓名</span><b data-page-node-id="6iJZdWlHt35KA0CeWymkaI">周子涵（女）</b></div><div class="info-row" data-page-node-id="VutGcyAb5o5CZC9xShHqrA"><span data-page-node-id="j2ipbn1R4cPnfxajAGnXqN">年龄</span><b data-page-node-id="0TtqFOdExX2sDmJzIy8ji5">8岁</b></div><div class="info-row" data-page-node-id="ey5X3ntKgD6LhlkPtDInwx"><span data-page-node-id="GtAp2oyEYNAiMR1IMCNLJ6">接送日期</span><b data-page-node-id="snzzXF7oYhNz2lykq7jOHf">2026-09-09</b></div><div class="info-row" data-page-node-id="tmcHO9RH8Wm5lUpBgEAJXG"><span data-page-node-id="I1IJmoznDbQpCVh57ac0xd">接送路线</span><b data-page-node-id="P8TErCpXwSWLDxVWBJLz23">幸福里小区 → 幸福里实验小学</b></div><div class="info-row" data-page-node-id="JovVMAEuGUfy581OTNmyDK"><span data-page-node-id="4tj6Wt2BPJh5FtjnBx2fz5">时间安排</span><b data-page-node-id="NadO9CmwgH7JfUdDyNmfoe">放学后 16:30 接回</b></div><div class="info-row" data-page-node-id="4PqoP9r2FDae6lc3DFloBJ"><span data-page-node-id="tBbyTrGkbE04tDHYe6PoaP">家长电话</span><b data-page-node-id="QOiOeUfvtuSFf2iI9kI8di">139****6002</b></div></div>
+  <div class="card" data-page-node-id="qsOAXP00E4dBkWi8NiINp4"><div class="card-title" data-page-node-id="ahPTEioOYKPHyAZPGRnvCy">服务要求</div><div style="font-size:13px;line-height:1.8;color:#3A4150" data-page-node-id="FuaODp3rX9L4s53UsW3YBZ">接到孩子后先确认身份，途中注意安全，到家后通知家长。若遇特殊情况请及时联系家长及管理员。</div></div>
+    </div>
+  <div class="bottom-bar" data-page-node-id="mrWvyvDM6pliYNa42s9F9b"><button class="btn btn-outline" style="width:100%" onclick="toast('已调起拨号：139****6002')" data-page-node-id="WFdfWFqADfXrwLkEy329RC">联系家长</button></div>
+</section>
+
+<!--P08 陪诊单详情-->
+<section class="page" id="P08" data-page-node-id="nIFkGWXRzeIKeXzbYkNHA6">
+  <div class="page-body">
+  <div class="card" style="text-align:center;padding:18px 14px" data-page-node-id="QFF8nubUD8CpwVa7sEKpQZ"><div class="status-badge wait" id="visitStatus" data-page-node-id="4Kvr4a8jJ2BFNRfvItr7bP">待陪诊</div><div style="font-size:12px;color:var(--sub);margin-top:8px" data-page-node-id="lATzO0Cn1HgNDnUcuHAoJl">订单编号</div><div style="font-size:16px;font-weight:700;margin-top:3px" data-page-node-id="xIf7Jf2pbqEzI5O1EWVGhX">GHJ20260909-002</div></div>
+  <div class="card" data-page-node-id="JHFQgBRz6gCSi06r5v3Qcq"><div class="card-title" data-page-node-id="HxIWWtFdobVysXXZi6OgPB">就诊信息</div><div class="info-row" data-page-node-id="wJ68brkJBTMvt4gU6sci1y"><span data-page-node-id="gWRj5ppoS4eirYQzDPNAxV">就诊人</span><b data-page-node-id="hE5qtR3894XCG8QAmiETih">陈志强</b></div><div class="info-row" data-page-node-id="D3OxtzOdnRrQP8s8Q9z921"><span data-page-node-id="tX1YvxzKkKyNrCz8ZiJhT3">就诊医院</span><b data-page-node-id="eICxiJBCxGrlZdJ6VyiHhm">市中心医院</b></div><div class="info-row" data-page-node-id="GRCLp7wfZXsBKBZcgH4Wjf"><span data-page-node-id="j9ehDQPoMYp01LQrbb5SBa">科室</span><b data-page-node-id="dfeWXpNp5PokYp6M4z7FqN">心内科</b></div><div class="info-row" data-page-node-id="DyDGYNfWrqsl04EiqP3QvU"><span data-page-node-id="7EH6DlP9epGL7WIH17rDKd">预约时间</span><b data-page-node-id="yj3TDV6R4l5p1Uky9sYCSt">2026-09-09 14:00</b></div><div class="info-row" data-page-node-id="KjJi7G5kKbt0BBNE00aJpF"><span data-page-node-id="u1OmxlbAQPEcgbF15kFCl3">集合地址</span><b data-page-node-id="tFU7f0XSYdK0JSi9zS1IFe">幸福里小区南门</b></div><div class="info-row" data-page-node-id="sZZz2hewokMU6M0EBTYFah"><span data-page-node-id="cUYUGGYzm4zGE6dHyG2ivT">联系电话</span><b data-page-node-id="hYWHVDf8kdl0CFpl4jfCgL">138****5002</b></div></div>
+  <div class="card" data-page-node-id="qXV8Vrn0bnrpfDupYtAnUS"><div class="card-title" data-page-node-id="h9uzwEdAbn23Zqvbwy7lGj">陪诊事项</div><div style="font-size:13px;line-height:1.8;color:#3A4150" data-page-node-id="22ZqLiqeZUxwoIO2noGJE0">协助挂号取号、陪同候诊、取检查报告，并记录医生交代事项。服务结束后将老人安全送回集合地址。</div></div>
+    </div>
+  <div class="bottom-bar" data-page-node-id="fds858v9eB0eU3CuKuozMg"><button class="btn btn-outline" id="visitCall" onclick="toast('已调起拨号：138****5002')" data-page-node-id="kaPImShI6g9lFm9Wst6POF">一键拨号</button><button class="btn btn-primary" id="visitAction" onclick="openPhoto('visit')" data-page-node-id="PuZSuc4yF4pIETRSIjB2Ls">拍照确认完成</button></div>
+</section>
+
+<!--P09 用户资料-->
+<section class="page" id="P09">
+  <div class="page-body">
+    <div class="profile-hero">
+      <div class="ph-av">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 20c.8-3.4 3.6-5.4 7-5.4s6.2 2 7 5.4"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="ph-name">管家小顾</div>
+        <span class="ph-tag">楼栋管家</span>
+        <div class="ph-sub">幸福里小区</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="card-title">服务统计</div>
+      <div class="stat2">
+        <div class="stat"><div class="num">197</div><div class="lbl">累计订单</div></div>
+        <div class="stat"><div class="num">312</div><div class="lbl">服务天数</div></div>
+      </div>
+    </div>
+
+    <div style="margin:14px 12px 0"><b style="font-size:15px">基本信息</b></div>
+    <div class="card" style="margin-top:8px">
+      <div class="info-row"><span>姓名</span><b>顾小满</b></div>
+      
+      <div class="info-row"><span>手机号码</span><b>138 1234 5001</b></div>
+      <div class="info-row"><span>所属岗位</span><b>楼栋管家</b></div>
+      <div class="info-row"><span>服务小区</span><b>幸福里小区</b></div>
+      <div class="info-row"><span>负责楼栋</span><b>3栋、5栋、7栋</b></div>
+      <div class="info-row"><span>入职日期</span><b>2024-03-18</b></div>
+      <div class="info-row"><span>在职状态</span><b style="color:var(--mint)">在职</b></div>
+    </div>
+
+    <div style="margin:14px 12px 0"><b style="font-size:15px">账号设置</b></div>
+    <div class="card set-group" style="margin-top:8px">
+                  <div class="set-item" onclick="toast('缓存已清除（原型演示）')">
+        <span class="si-ico" style="background:rgba(255,138,92,.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FF8A5C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M6 7l1 13h10l1-13"/></svg></span>
+        <span class="si-t">清除缓存</span>
+        <span class="si-v">12.4 MB</span>
+        <span class="si-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </div>
+      <div class="set-item" onclick="toast('顾好家社区服务 员工端 v1.0.0')">
+        <span class="si-ico" style="background:rgba(58,201,154,.12)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3AC99A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>
+        <span class="si-t">关于顾好家</span>
+        <span class="si-v">v1.0.0</span>
+        <span class="si-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </div>
+    </div>
+    <div style="height:10px"></div>
+  </div>
+  <div class="bottom-bar"><button class="btn btn-danger" style="width:100%" onclick="askLogout()">退出登录</button></div>
+</section>
+
+<!--P10 用户服务协议-->
+<section class="page" id="P10">
+  <div class="page-body">
+    <div class="doc">
+      <div class="doc-meta">版本号 V2.1　·　生效日期：2026年1月1日</div>
+      <p>本协议是您（以下称"员工"或"您"）与顾好家社区服务平台（以下称"平台"）就使用顾好家社区服务 APP 员工端（以下称"本服务"）所订立的协议。在使用本服务前，请务必仔细阅读并充分理解本协议全部内容，特别是加粗或下划线标注的免责条款、责任限制条款。</p>
+      <div class="doc-note">如您未满 18 周岁，请在法定监护人的陪同下阅读本协议。您勾选同意并登录本服务，即视为您已阅读并同意接受本协议全部内容的约束。</div>
+
+      <h2>一、协议的订立</h2>
+      <p>1.1 本协议由您与平台运营方共同缔结，具有合同效力。平台有权根据运营需要不时修订本协议，修订后的协议一经公示即取代原协议。</p>
+      <p>1.2 您理解并同意，平台有权在提前 7 日公示的前提下单方面调整服务内容、服务规则及相关费用标准。</p>
+
+      <h2>二、账号与使用</h2>
+      <p>2.1 您须使用本人真实手机号码注册并完成短信验证后方可登录本服务。账号仅限本人使用，不得出借、转让、出租或赠与第三方。</p>
+      <p>2.2 您应妥善保管登录账号与验证码，因您主动或被动泄露、遗忘而导致的一切损失与纠纷，由您自行承担。</p>
+      <p>2.3 如发现账号存在被盗用、冒用或其他异常情形，应立即联系平台管理员申请冻结，平台将在核实身份后协助处理。</p>
+
+      <h2>三、服务内容与范围</h2>
+      <p>3.1 本服务面向社区服务人员开放，涵盖膳食配送、陪诊服务、托管接送三类核心业务工单的接单、执行、拍照确认与进度反馈。</p>
+      <p>3.2 平台仅提供信息撮合与流程管理服务，您作为实际服务提供方，应独立、完整、安全地完成服务工单，并对服务过程与结果负责。</p>
+      <p>3.3 平台有权根据您的服务评分、投诉记录与资质情况，调整派单优先级或暂停派单。</p>
+
+      <h2>四、员工职责与服务规范</h2>
+      <p>4.1 您应在约定时间、地点提供服务，服务开始前须核实服务对象身份，服务完成后须按要求拍照留存并如实提交。</p>
+      <p>4.2 服务过程中应遵守职业操守，保护服务对象的人身安全、财产安全与人格尊严，不得索取额外费用或收受财物。</p>
+      <p>4.3 您应对服务过程中知悉的业主信息、健康状况、家庭情况等严格保密，不得向任何第三方披露或用于本次服务之外的用途。</p>
+      <p>4.4 遇突发情况（如服务对象身体不适、交通意外等）应立即上报管理员，并在保障安全的前提下采取必要救助措施。</p>
+
+      <h2>五、收益与结算</h2>
+      <p>5.1 您的服务收益依据平台公示的计价规则计算，具体金额以工单完成后的收益明细为准。</p>
+      <p>5.2 收益按月度结算，平台于每月月底统一核算并录入，次月发放至您绑定的收款账户。</p>
+      <p>5.3 因虚假拍照、恶意刷单、服务未实际完成等行为获取的收益，平台有权追回并视情节暂停或终止您的服务资格。</p>
+
+      <h2>六、违约责任</h2>
+      <p>6.1 您违反本协议约定，或因您提供的服务导致服务对象、第三方或平台遭受损失的，您应承担全部赔偿责任。</p>
+      <p>6.2 您存在下列情形之一的，平台有权立即终止服务并追究法律责任：提供虚假身份信息；伪造服务凭证；泄露服务对象隐私；利用本服务从事违法活动。</p>
+
+      <h2>七、免责与责任限制</h2>
+      <p>7.1 因不可抗力（包括但不限于自然灾害、战争、政府行为、网络攻击、基础电信故障）导致服务中断或无法履行的，平台不承担违约责任。</p>
+      <p>7.2 在法律允许的最大范围内，平台就本服务承担的累计赔偿责任，不超过您当月已结算服务收益的总额。</p>
+
+      <h2>八、协议的变更与终止</h2>
+      <p>8.1 平台可通过 APP 内公告、短信或站内信方式修订本协议，修订内容自公示之日起 7 日后生效。</p>
+      <p>8.2 若您不同意修订后的条款，应立即停止使用本服务；您继续使用即视为接受修订后的协议。</p>
+      <p>8.3 您可随时申请注销账号，经平台核实无未完成工单及未结清款项后办理。</p>
+
+      <h2>九、法律适用与争议解决</h2>
+      <p>9.1 本协议的订立、效力、解释、履行及争议解决均适用中华人民共和国大陆地区法律。</p>
+      <p>9.2 双方就本协议内容或其执行发生争议的，应友好协商解决；协商不成的，任何一方均可向平台运营方所在地有管辖权的人民法院提起诉讼。</p>
+
+      <div class="doc-sign">顾好家社区服务平台<br>运营方：践行未来科技有限公司</div>
+    </div>
+  </div>
+</section>
+
+<!--P11 隐私政策-->
+<section class="page" id="P11">
+  <div class="page-body">
+    <div class="doc">
+      <div class="doc-meta">版本号 V2.1　·　生效日期：2026年1月1日</div>
+      <p>顾好家社区服务平台（以下称"我们"）深知个人信息对您的重要性，并会尽全力保护您的个人信息安全可靠。我们致力于维持您对我们的信任，恪守权责一致、目的明确、最少够用、确保安全等原则保护您的个人信息。</p>
+      <div class="doc-note">本政策将帮助您了解：我们如何收集和使用您的个人信息，如何存储和保护这些信息，以及您所享有的权利。请您在使用本服务前仔细阅读。</div>
+
+      <h2>一、我们收集的信息</h2>
+      <p>1.1 <b>注册与认证信息</b>：为完成实名注册与岗位核验，我们会收集您的手机号码、短信验证码、真实姓名、身份证号（仅用于从业资质核验，脱敏存储）、岗位类型及所属服务小区。</p>
+      <p>1.2 <b>服务过程信息</b>：为完成工单闭环与服务留痕，我们会收集您的接单记录、服务时间、服务轨迹（仅在执行工单期间采集）、现场照片及提交的服务备注。</p>
+      <p>1.3 <b>设备与日志信息</b>：为保障账号安全与服务稳定，我们会收集设备型号、操作系统版本、唯一设备标识符、IP 地址及操作日志。</p>
+      <p>1.4 <b>收益结算信息</b>：为向您发放服务收益，我们会收集您绑定的收款账户信息。</p>
+
+      <h2>二、我们如何使用信息</h2>
+      <p>2.1 用于完成您的身份核验、账号注册与登录鉴权。</p>
+      <p>2.2 用于向您派发服务工单、展示工单进度、记录服务完成情况并进行服务质量考核。</p>
+      <p>2.3 用于计算与发放您的服务收益，并在收益明细中向您展示。</p>
+      <p>2.4 用于在发生服务争议、投诉或安全事件时进行责任追溯与核实取证。</p>
+      <p>2.5 <b>我们不会将您的个人信息用于本政策未载明的其他目的。如确需变更使用目的，我们将再次征得您的明示同意。</b></p>
+
+      <h2>三、信息的共享、转让与公开披露</h2>
+      <p>3.1 <b>共享</b>：我们不会与任何公司、组织和个人共享您的个人信息，但以下情形除外：事先获得您的明确同意；为完成服务所必需，向服务对象提供您的姓名、联系方式与服务状态（不含完整手机号）；根据法律法规或监管机构要求。</p>
+      <p>3.2 <b>转让</b>：如因合并、分立、重组、破产等原因需转移个人信息，我们将向您告知接收方的名称与联系方式，并要求接收方继续受本政策约束。</p>
+      <p>3.3 <b>公开披露</b>：我们不会公开披露您的个人信息，除非获得您的明示同意或依据法律法规、司法程序的强制要求。</p>
+
+      <h2>四、信息的存储与保护</h2>
+      <p>4.1 <b>存储地域</b>：我们在中华人民共和国境内运营中收集和产生的个人信息，均存储于中国境内。</p>
+      <p>4.2 <b>存储期限</b>：我们仅在为实现本政策所述目的所必需的最短时间内保留您的个人信息。服务工单记录保留 3 年，超出期限后我们将对个人信息进行删除或匿名化处理。</p>
+      <p>4.3 <b>安全措施</b>：我们采用传输层加密（HTTPS）、存储加密、访问权限分级控制、安全审计等技术措施保护您的信息，并定期开展安全培训与应急演练。</p>
+      <p>4.4 <b>安全事件响应</b>：如不幸发生个人信息泄露等安全事件，我们将按法律法规要求及时向您告知事件基本情况、影响范围、已采取的措施及您的应对建议，并同步上报监管部门。</p>
+
+      <h2>五、您的权利</h2>
+      <p>5.1 <b>访问与更正</b>：您可以通过"个人资料"页查看并更正您的姓名、手机号码、收款账户等基本信息。</p>
+      <p>5.2 <b>删除</b>：在您注销账号、我们停止运营或您撤回同意等情形下，您可以申请删除您的个人信息。</p>
+      <p>5.3 <b>撤回同意</b>：您可以通过关闭设备权限、退出登录等方式撤回此前授予的授权同意。</p>
+      <p>5.4 <b>注销账号</b>：您可通过平台管理员申请注销账号，注销后我们将停止为您提供服务并删除或匿名化您的个人信息（法律法规另有规定的除外）。</p>
+      <p>5.5 <b>获取副本</b>：您有权要求获取您的个人信息副本，我们将在核验身份后 15 个工作日内响应。</p>
+
+      <h2>六、Cookie 与同类技术</h2>
+      <p>6.1 为保障服务正常运转，我们会在您的设备上存储名为 Cookie 的小数据文件，用于识别您的登录状态、记录偏好设置。</p>
+      <p>6.2 您可以通过浏览器或系统设置管理、删除 Cookie，但这可能导致您无法使用依赖于 Cookie 的部分服务功能。</p>
+
+      <h2>七、未成年人信息保护</h2>
+      <p>7.1 本服务面向具备完全民事行为能力的成年人，我们不面向未满 18 周岁的自然人提供服务。</p>
+      <p>7.2 若您是未成年人的监护人，发现被监护人注册使用了本服务，请及时联系我们，我们将在核实后尽快删除相关信息。</p>
+
+      <h2>八、政策的更新</h2>
+      <p>8.1 本政策可能随着业务变化而适时修订。未经您明确同意，我们不会削减您按本政策所享有的权利。</p>
+      <p>8.2 重大变更时，我们将通过 APP 内弹窗、公告或短信等显著方式向您提示，您可重新阅读并选择是否继续使用本服务。</p>
+
+      <h2>九、联系我们</h2>
+      <p>9.1 如您对本政策有任何疑问、意见或投诉，可通过以下方式与我们联系，我们将在收到请求之日起 15 个工作日内予以答复。</p>
+      <p>客服电话：400-800-1234（工作日 9:00-18:00）<br>电子邮箱：privacy@gujiahao.com<br>联系地址：践行未来科技有限公司 · 隐私合规部</p>
+
+      <div class="doc-sign">顾好家社区服务平台<br>更新日期：2026年1月1日</div>
+    </div>
+  </div>
+</section>
+
+  </div>
+
+  <div class="tabbar" id="tabbar" style="display:none" data-page-node-id="O8MWv3I4yTPBHXoCNfVgdz">
+    <button class="tab active" data-page="P02" onclick="go('P02')" data-page-node-id="Hrqukz2neLCXLzahWSN5jK">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="21h7bMQWHUhcC6VD45zkE6"><path d="M3 10.5L12 3l9 7.5" data-page-node-id="L77VFs0RSs5mLHBMyjAdeX"/><path d="M5 9.5V21h5v-6h4v6h5V9.5" data-page-node-id="WA3U9Z4S6YA3tsfLcvTafZ"/></svg>
+      首页
+    </button>
+    <button class="tab" data-page="P05" onclick="go('P05')" data-page-node-id="z9tcY2kd2OaSduosDfDTqX">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" data-page-node-id="qMrXb2RGYBsvgkGUEvxOab"><rect x="4" y="3" width="16" height="18" rx="3" data-page-node-id="qyAwzul3JzJaMETYaxDVV6"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4.5" data-page-node-id="oQZfc2JB7pLx24tFjbXqpB"/></svg>
+      订单
+    </button>
+  </div>
+  <div class="home-indicator" data-page-node-id="UecJh5Qs7x7Qyky4T9sTFX"><i data-page-node-id="wrrmDGICIGBA7UseUes4kh"></i></div>
+
+<div class="overlay" id="sheetOverlay">
+    <div class="sheet boardsheet" id="sheetContent"></div>
+  </div>
+    <div class="overlay" id="photoOverlay" data-page-node-id="pKSfNOfQATPG3QRJjUfBPj">
+    <div class="sheet" data-page-node-id="wgnUcEfsk2FNtD6rXvIfUT">
+      <div id="camStep" data-page-node-id="W92wSwMOE5H7tDjiMEDTjJ">
+        <h3 data-page-node-id="oprb7VrDKd7bKbll4bZ1E6">拍照确认</h3>
+        <div class="sub" data-page-node-id="FQfFyFj0BmjOZmppD3HYKd">请拍摄服务完成凭证照片，上传后状态将更新</div>
+        <div class="cam-box" onclick="takePhoto()" data-page-node-id="QZUCqN7uKu2COEeJb7ClrA">
+          <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="aAmeOZ8wH0KWcMhFAYCMOE"><path d="M4 8h3l1.5-2.5h7L17 8h3a1.5 1.5 0 011.5 1.5V19A1.5 1.5 0 0120 20.5H4A1.5 1.5 0 012.5 19V9.5A1.5 1.5 0 014 8z" data-page-node-id="gcjanzye6EXmV42eyPOVzJ"/><circle cx="12" cy="13.5" r="3.5" data-page-node-id="GlfTMYgD9eATnmABZ1WTvq"/></svg>
+        </div>
+        <div class="sub" style="margin:0" data-page-node-id="3RSmLIyPq23F0GQFLv9TUW">点击相机调起拍照</div>
+      </div>
+      <div id="previewStep" style="display:none" data-page-node-id="QAdEFyDDOv5i1C1AiQUTh5">
+        <h3 data-page-node-id="k0FkCC8IP4YmHZpcC7FRpk">确认照片</h3>
+        <div class="sub" data-page-node-id="cfIsQdMylEJM7G6d4D2AGe">预览确认无误后提交</div>
+        <div class="preview-box" data-page-node-id="QGmAfpmtzLfoQoTxn02xh8">
+          <i class="corner c1" data-page-node-id="6zy2ABfMmNT5owgDKKev8c"></i><i class="corner c2" data-page-node-id="DnahB2TewMumfugg3mFijP"></i><i class="corner c3" data-page-node-id="eDsnAOb1TypS1T7c6MFOHZ"></i><i class="corner c4" data-page-node-id="NsMiYHYh0cMhF6vz1CrwG0"></i>
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#2FB287" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="4qbTNIulEHJxI29bwlx3iX"><path d="M5 12.5l4.5 4.5L19 7.5" data-page-node-id="8AtI6l7GbLnuHRxeG9oDaJ"/></svg>
+        </div>
+        <div style="display:flex;gap:10px" data-page-node-id="jCBaA0F9BISp2U6jGClSZY">
+          <button class="btn btn-outline" onclick="retake()" data-page-node-id="aBZrM41PR6lmBNhCZ8swlj">重新拍摄</button>
+          <button class="btn btn-primary" onclick="confirmPhoto()" data-page-node-id="WvXlwnshcgURNDDKiwxUEZ">确认提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="confirm-mask" id="confirmMask">
+    <div class="confirm-box">
+      <div class="cb-t">确定要退出当前账号吗？<br>退出后需要重新验证登录</div>
+      <div class="cb-b">
+        <button onclick="closeConfirm()">取消</button>
+        <button class="ok" onclick="doLogout()">退出登录</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" data-page-node-id="sqLFSPG9F04ahXDC1Avdza"></div>
+</div>
+</div>
+<script>
+const titles={P01:'账号登录',P02:'员工工作台',P03:'收益明细',P04:'需求详情',P05:'我的订单',P06:'报餐单详情',P07:'托管单详情',P08:'陪诊单详情',P09:'个人资料',P10:'用户服务协议',P11:'隐私政策'};
+let current='P01',previous='P01',orderType='baocan',photoType='';
+const orders={
+  baocan:[{no:'GHJ20260909-001',name:'王秀兰',room:'3栋2单元501',time:'今天 11:00-12:30',status:'待配送',cls:'wait',detail:'P06'},{no:'GHJ20260908-006',name:'李桂芳',room:'3栋2单元503',time:'昨天 11:00-12:30',status:'已配送',cls:'done',detail:'P06'},{no:'GHJ20260908-004',name:'赵敏',room:'3栋2单元504',time:'昨天 17:00-18:30',status:'已配送',cls:'done',detail:'P06'}],
+  tuoguan:[{no:'GHJ20260909-003',name:'周子涵',room:'幸福里小区',time:'今天 16:30 接回',status:'进行中',cls:'doing',detail:'P07'},{no:'GHJ20260907-008',name:'刘思远',room:'幸福里小区',time:'09-07 17:00 接回',status:'进行中',cls:'doing',detail:'P07'}],
+  peizhen:[{no:'GHJ20260909-002',name:'陈志强',room:'市中心医院 心内科',time:'今天 14:00',status:'待陪诊',cls:'wait',detail:'P08'},{no:'GHJ20260906-011',name:'张桂英',room:'人民医院 老年科',time:'09-06 09:00',status:'已完成',cls:'done',detail:'P08'}]
+};
+const revenue=[['陪诊服务','GHJ20260906-011','09-06','+¥180.00','陪诊单'],['膳食配送','GHJ20260908-006','09-08','+¥36.00','报餐单'],['托管接送','GHJ20260907-008','09-07','+¥240.00','托管单'],['膳食配送','GHJ20260909-001','待结算','+¥36.00','报餐单'],['陪诊服务','GHJ20260909-002','待结算','+¥180.00','陪诊单']];
+function byId(id){return document.getElementById(id)}
+function go(id,type){if(!byId(id))return;previous=current;current=id;document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));byId('navTitle').textContent=titles[id]||'';byId('navbar').classList.toggle('has-back',!['P01','P02','P05'].includes(id));byId('tabbar').style.display=['P02','P05'].includes(id)?'flex':'none';document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.page===id));if(id==='P05')switchOrder(type||orderType);const sc=byId(id).querySelector('.page-body');if(sc)sc.scrollTop=0}
+function goBack(){if(current==='P10'||current==='P11'){go('P01');return}go(previous==='P01'?'P02':previous)}
+/* ===== 协议富文本页：从登录页打开，返回时回到登录页 ===== */
+function openAgreement(id){previous='P01';go(id)}
+function sendCode(btn){let n=60;btn.disabled=true;btn.textContent=n+'秒后重试';const timer=setInterval(()=>{n--;btn.textContent=n+'秒后重试';if(n<=0){clearInterval(timer);btn.disabled=false;btn.textContent='获取验证码'}},1000);toast('验证码已发送（原型演示）')}
+function doLogin(){const phone=byId('loginPhone').value,code=byId('loginCode').value;if(phone.length!==11){toast('请输入11位手机号码');byId('loginPhone').focus();return}if(code.length!==6){toast('请输入6位验证码');byId('loginCode').focus();return}if(!byId('agree').checked){toast('请先勾选同意协议');return}go('P02');toast('登录成功，欢迎回来')}
+function toggleAgree(){byId('loginBtn').disabled=!byId('agree').checked}
+/* ===== 退出登录 ===== */
+function askLogout(){byId('confirmMask').classList.add('show')}
+function closeConfirm(){byId('confirmMask').classList.remove('show')}
+function doLogout(){closeConfirm();byId('loginPhone').value='13812345001';byId('loginCode').value='';byId('agree').checked=false;byId('loginBtn').disabled=true;const cb=byId('codeBtn');if(cb){cb.disabled=false;cb.textContent='获取验证码'}previous='P01';go('P01');toast('已退出登录，请重新登录')}
+function filterNeeds(value){const q=value.trim().toLowerCase();let shown=0;document.querySelectorAll('#needList .need-item').forEach(item=>{const ok=!q||item.dataset.k.toLowerCase().includes(q);item.style.display=ok?'flex':'none';if(ok)shown++});byId('needEmpty').style.display=shown?'none':'block'}
+function switchOrder(type){orderType=type||'baocan';document.querySelectorAll('.otab').forEach(t=>t.classList.toggle('active',t.dataset.type===orderType));renderOrders(byId('orderSearch')?byId('orderSearch').value:'')}
+function renderOrders(query){const q=(query||'').trim().toLowerCase(),list=orders[orderType].filter(o=>!q||[o.no,o.name,o.room,o.status].join(' ').toLowerCase().includes(q));byId('orderList').innerHTML=list.map(o=>`<div class="order-item" onclick="openOrder('${o.detail}','${o.status}','${o.no}')"><div class="oi-head"><span class="oi-no">${o.no}</span><span class="tag ${o.cls==='wait'?'coral':o.cls==='done'?'mint':'blue'}">${o.status}</span></div><div class="oi-rows"><div><span>服务对象</span><b>${o.name}</b></div><div><span>地址/医院</span><b>${o.room}</b></div><div><span>服务时间</span><b>${o.time}</b></div></div></div>`).join('');byId('orderEmpty').style.display=list.length?'none':'block'}
+function filterOrders(value){renderOrders(value)}
+function filterRevenue(type){const list=type==='all'?revenue:revenue.filter(r=>r[4]===type);byId('revList').innerHTML=list.map(r=>`<div class="rev-item"><div class="ri-main"><div class="ri-t">${r[0]}</div><div class="ri-s">${r[1]} · ${r[2]}</div></div><span class="tag ${r[2]==='待结算'?'coral':'mint'}">${r[2]==='待结算'?'待发放':'已发放'}</span><div class="ri-amt" style="color:${r[2]==='待结算'?'var(--coral)':'var(--mint)'}">${r[3]}</div></div>`).join('');byId('revEmpty').style.display=list.length?'none':'block'}
+function openPhoto(type){photoType=type;byId('photoOverlay').classList.add('show');byId('camStep').style.display='block';byId('previewStep').style.display='none'}
+function takePhoto(){byId('camStep').style.display='none';byId('previewStep').style.display='block'}
+function retake(){takePhoto();byId('camStep').style.display='block';byId('previewStep').style.display='none'}
+function confirmPhoto(){byId('photoOverlay').classList.remove('show');if(photoType==='meal'){byId('mealStatus').className='status-badge done';byId('mealStatus').textContent='已配送';byId('mealAction').textContent='已完成配送';byId('mealAction').disabled=true;byId('mealAction').style.background='#B9C4CF';byId('mealTimeline').classList.add('done');byId('mealTimeline').querySelector('.tl-t').textContent='配送已完成';byId('mealTimeline').querySelector('.tl-d').textContent='刚刚'}if(photoType==='visit'){finishVisit()}toast('照片提交成功，订单状态已更新')}
+let curOrder=null;
+function applyVisitState(status){
+  const done=status==='已完成';
+  byId('visitStatus').className='status-badge '+(done?'done':'wait');
+  byId('visitStatus').textContent=status;
+  byId('visitAction').style.display=done?'none':'block';
+  byId('visitCall').style.width=done?'100%':'';
+}
+function openOrder(detail,status,no){
+  curOrder=no||null;
+  go(detail);
+  if(detail==='P08')applyVisitState(status);
+}
+function finishVisit(){
+  applyVisitState('已完成');
+  if(curOrder){
+    const o=orders.peizhen.find(x=>x.no===curOrder);
+    if(o){o.status='已完成';o.cls='done';}
+    renderOrders(byId('orderSearch')?byId('orderSearch').value:'');
+  }
+}
+function toast(message){const el=byId('toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
+byId('photoOverlay').addEventListener('click',e=>{if(e.target.id==='photoOverlay')e.currentTarget.classList.remove('show')});
+byId('confirmMask').addEventListener('click',e=>{if(e.target.id==='confirmMask')e.currentTarget.classList.remove('show')});
+/* 视口适配：宽屏时按可用高度等比缩放，保证 375:812 比例恒定且一屏看全；窄屏保持 375 基准宽度纵向滚动 */
+function fitPhone(){
+  var stage=document.querySelector('.stage');
+  var vh=window.innerHeight-28,vw=window.innerWidth;
+  var s=vw<389?1:Math.min(1,vh/812);
+  stage.style.transform='scale('+s+')';
+  stage.style.height=Math.round(812*s)+'px';
+}
+window.addEventListener('resize',fitPhone);
+fitPhone();
+/* ===== 收益筛选状态 ===== */
+let revType='all';
+const revLabels={all:'全部类型','报餐单':'报餐单','托管单':'托管单','陪诊单':'陪诊单'};
+let revDate=new Date(2026,8,1);
+function fmtDate(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function renderRevenue(){
+  const list=revType==='all'?revenue:revenue.filter(r=>r[4]===revType);
+  byId('revList').innerHTML=list.map(r=>'<div class="rev-item"><div class="ri-main"><div class="ri-t">'+r[0]+'</div><div class="ri-s">'+r[1]+' · '+r[2]+'</div></div><span class="tag '+(r[2]==='待结算'?'coral':'mint')+'">'+(r[2]==='待结算'?'待发放':'已发放')+'</span><div class="ri-amt" style="color:'+(r[2]==='待结算'?'var(--coral)':'var(--mint)')+'">'+r[3]+'</div></div>').join('');
+  byId('revEmpty').style.display=list.length?'none':'block';
+  byId('typeText').textContent=revLabels[revType]||'全部类型';
+  byId('dateText').textContent=fmtDate(revDate);
+}
+function filterRevenue(type){revType=type||'all';renderRevenue()}
+/* ===== 底部 Sheet 弹层 ===== */
+function openSheet(type){
+  byId('sheetContent').innerHTML=type==='date'?renderCal():renderType();
+  byId('sheetOverlay').classList.add('show');
+  if(type==='type')bindSheetList();
+}
+function closeSheet(){byId('sheetOverlay').classList.remove('show')}
+function renderCal(){
+  const y=revDate.getFullYear(),m=revDate.getMonth();
+  const first=new Date(y,m,1).getDay();
+  const days=new Date(y,m+1,0).getDate();
+  const mn=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  const wk=['日','一','二','三','四','五','六'];
+  let h='<div class="sheet-hd"><div class="hd-title">选择日期</div><button class="hd-close" onclick="closeSheet()">取消</button></div>';
+  h+='<div class="sheet-cal-nav"><button onclick="calShift(-1)">‹</button><div class="cal-tt">'+y+'年 '+mn[m]+'</div><button onclick="calShift(1)">›</button></div>';
+  h+='<div class="sheet-cal">';
+  for(const w of wk)h+='<div class="cal-wk">'+w+'</div>';
+  for(let i=0;i<first;i++)h+='<div class="cal-d muted"></div>';
+  const today=new Date();
+  for(let day=1;day<=days;day++){
+    const dd=new Date(y,m,day);
+    const sel=dd.toDateString()===revDate.toDateString();
+    h+='<div class="cal-d'+(sel?' sel':'')+'" onclick="pickDate('+y+','+m+','+day+')">'+day+'</div>';
+  }
+  h+='</div>';
+  return h;
+}
+function calShift(d){
+  const y=revDate.getFullYear(),m=revDate.getMonth()+d;
+  revDate=new Date(y,m,1);
+  byId('sheetContent').innerHTML=renderCal();
+}
+function pickDate(y,m,day){
+  revDate=new Date(y,m,day);
+  renderRevenue();
+  closeSheet();
+  toast('筛选已刷新');
+}
+function renderType(){
+  const opts=[['all','全部类型'],['报餐单','报餐单'],['托管单','托管单'],['陪诊单','陪诊单']];
+  let h='<div class="sheet-hd"><div class="hd-title">选择类型</div><button class="hd-close" onclick="closeSheet()">取消</button></div>';
+  h+='<div class="sheet-list">';
+  for(const [v,l] of opts){
+    const ck=v===revType;
+        let cls=ck?' sel':'';
+    let chk=ck?'<span class="chk">✓</span>':'';
+    h+='<div class="lsi'+cls+'" data-v="'+v+'"><span>'+l+'</span>'+chk+'</div>';
+  }
+  h+='</div>';
+  return h;
+}
+function pickType(v){
+  revType=v;
+  renderRevenue();
+  closeSheet();
+  toast('筛选已刷新');
+}
+function bindSheetList(){
+  const list=byId('sheetContent').querySelector('.sheet-list');
+  if(list && !list._bound){list._bound=true;list.addEventListener('click',e=>{const item=e.target.closest('.lsi');if(!item||!list.contains(item))return;const v=item.getAttribute('data-v');if(v)pickType(v)})}
+}
+byId('sheetOverlay').addEventListener('click',e=>{if(e.target.id==='sheetOverlay')e.currentTarget.classList.remove('show')});
+renderRevenue();go('P01');
+</script>
+</body>
+</html>
