@@ -128,7 +128,6 @@ body{
 .doc .doc-note{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--sub);line-height:1.75;margin-top:8px}
 .doc .doc-sign{margin-top:22px;padding-top:14px;border-top:1px dashed var(--line);font-size:12px;color:var(--sub);text-align:right;line-height:1.8}
 .confirm-box .cb-b button.ok{color:#FF5B5B;font-weight:600}
-.confirm-box .cb-b button.ok.mint{color:#1FA97A}
 .stat4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .stat2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
@@ -163,7 +162,6 @@ body{
 .oi-rows div{display:flex;justify-content:space-between;gap:12px;font-size:12px}
 .oi-rows span{color:var(--sub);flex:none}
 .oi-rows b{font-weight:500;text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#lifeCover svg{width:30px;height:30px}
 .empty{display:none;text-align:center;padding:48px 0;color:var(--sub);font-size:13px}
 /* 收益：月度结算状态横幅 */
 .rev-banner{display:flex;align-items:center;gap:8px;margin:12px 12px 4px;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:600}
@@ -370,34 +368,31 @@ body{
 
   <div class="card" data-page-node-id="iOhZ8fLaOIFiOb0eW2SBAd">
     <div class="card-title" data-page-node-id="VeKTNd8U3j1Du5R5FeU6Br">订单概览</div>
-    <div class="stat4" data-page-node-id="J62m2xC92rZ0BjFv9e6cI8">
+    <div class="stat3" data-page-node-id="J62m2xC92rZ0BjFv9e6cI8">
       <div class="stat-block" onclick="go('P05','baocan')" data-page-node-id="smMjX1b8k08fMHIFAZDMQk"><div class="num" data-page-node-id="kyCC4cAIaSPzbCk24CULuB">128</div><div class="lbl" data-page-node-id="pEKvTPzhUe8kzlDjJTr4xS">膳食配送</div></div>
       <div class="stat-block" onclick="go('P05','peizhen')" data-page-node-id="yKZhKhvuHg7mY07etQoagH"><div class="num" data-page-node-id="cPoIIMIq58ZAp4IvKnyvJb">46</div><div class="lbl" data-page-node-id="leutI0TmDSfJRfcvO857u2">陪诊服务</div></div>
       <div class="stat-block" onclick="go('P05','tuoguan')" data-page-node-id="34FUlVKwnogO1svLNnSjZZ"><div class="num" data-page-node-id="CPJaevxteFyOFtwF6PdfXY">23</div><div class="lbl" data-page-node-id="dzzmJTvTnCS2Ev3pMwhmZy">托管接送</div></div>
-      <div class="stat-block" onclick="go('P05','shenghuo')" data-page-node-id="shStatLife"><div class="num" data-page-node-id="shNumLife">17</div><div class="lbl" data-page-node-id="shLblLife">生活帮手</div></div>
     </div>
   </div>
 
   <div class="card" data-page-node-id="3q1S7S74EFKY4a9jOsViFF">
     <div class="card-title" data-page-node-id="LcVaXuOTmg6cuBOlAfVg4m">今日待办</div>
-    <div class="stat4" data-page-node-id="xeJQNdDR1SxFhBIOy4d8yQ">
+    <div class="stat3" data-page-node-id="xeJQNdDR1SxFhBIOy4d8yQ">
       <div class="stat-block" onclick="go('P05','baocan')" data-page-node-id="RSp3PjOMlU8UCu881HXWun"><div class="num" style="color:var(--coral)" id="todoNumBaocan" data-page-node-id="l5yc2X7W4h4S7hCIwAB072">6</div><div class="lbl" data-page-node-id="ly3AiGqOSUl9jTmzj50uUh">膳食待配送</div></div>
       <div class="stat-block" onclick="go('P05','peizhen')" data-page-node-id="ZpyEI5RCVzWU22EciQ0nYh"><div class="num" style="color:var(--coral)" id="todoNumPeizhen" data-page-node-id="vGW2Ay0lDqM5xfBzotcOIv">2</div><div class="lbl" data-page-node-id="VUqYHiSrEvV9TzkSWCrqoS">陪诊服务</div></div>
       <div class="stat-block" onclick="go('P05','tuoguan')" data-page-node-id="shTodoTg"><div class="num" style="color:var(--coral)" id="todoNumTuoguan" data-page-node-id="shTodoTgN">3</div><div class="lbl" data-page-node-id="shTodoTgL">托管接送</div></div>
-      <div class="stat-block" onclick="go('P05','shenghuo')" data-page-node-id="shTodoLf"><div class="num" style="color:var(--coral)" id="todoNumShenghuo" data-page-node-id="shTodoLfN">4</div><div class="lbl" data-page-node-id="shTodoLfL">生活帮手</div></div>
     </div>
   </div>
 
   <div style="margin:12px 12px 0;display:flex;align-items:center;justify-content:space-between">
     <b style="font-size:15px">今日待办订单</b>
-    <span style="font-size:11px;color:var(--sub)" id="needHint">4 类服务 · 共 0 单</span>
+    <span style="font-size:11px;color:var(--sub)" id="needHint">3 类服务 · 共 0 单</span>
   </div>
   <div class="otabs" id="needTabs" style="margin:10px 12px 0">
     <button class="otab active" data-nt="all" onclick="switchNeed('all')">全部</button>
     <button class="otab" data-nt="baocan" onclick="switchNeed('baocan')">膳食配送</button>
     <button class="otab" data-nt="peizhen" onclick="switchNeed('peizhen')">陪诊服务</button>
     <button class="otab" data-nt="tuoguan" onclick="switchNeed('tuoguan')">托管接送</button>
-    <button class="otab" data-nt="shenghuo" onclick="switchNeed('shenghuo')">生活帮手</button>
   </div>
   <div class="search-box" style="margin:10px 12px">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
@@ -448,7 +443,6 @@ body{
     <button class="otab active" data-type="baocan" onclick="switchOrder('baocan')" data-page-node-id="qbUCPzIyLdNWMuzpody97a">报餐单</button>
     <button class="otab" data-type="tuoguan" onclick="switchOrder('tuoguan')" data-page-node-id="MYIF8m0vspRBxg2EJpYAAd">托管单</button>
     <button class="otab" data-type="peizhen" onclick="switchOrder('peizhen')" data-page-node-id="iW5zAH33HC8vzZNKvNT6cQ">陪诊单</button>
-    <button class="otab" data-type="shenghuo" onclick="switchOrder('shenghuo')" data-page-node-id="otabLife">生活帮手单</button>
   </div>
   <div class="search-box" style="margin-top:12px" data-page-node-id="mDKBBvAYhGJnVyBae666iQ">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="2" stroke-linecap="round" data-page-node-id="Ya3RRMcxGG7VDA28EuAcxr"><circle cx="11" cy="11" r="7" data-page-node-id="H75bC0uuC5zogcLwYqBCoA"/><path d="M20 20l-3.8-3.8" data-page-node-id="RNiF6sygBgbeIUlvoxV4nL"/></svg>
@@ -657,53 +651,6 @@ body{
   </div>
 </section>
 
-<!--P12 生活帮手单详情-->
-<section class="page" id="P12">
-  <div class="page-body">
-  <div class="card" style="text-align:center;padding:18px 14px">
-    <div class="status-badge doing" id="lifeStatus">进行中</div>
-    <div style="font-size:12px;color:var(--sub);margin-top:8px">订单编号</div>
-    <div style="font-size:16px;font-weight:700;margin-top:3px" id="lifeNo">GHJ20260909-005</div>
-  </div>
-  <div class="card">
-    <div style="display:flex;gap:12px;align-items:center">
-      <div class="oi-cover coral" id="lifeCover" style="width:64px;height:64px;border-radius:13px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#F0723C" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.3 5.7a5 5 0 01-6.5 6.5l-6.8 6.8a1.9 1.9 0 11-2.7-2.7l6.8-6.8A5 5 0 0117.6 3l-3 3 3.9 3.9z"/></svg>
-      </div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:8px"><div style="font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="lifeTitle">空调滤网清洗</div><span class="tag coral" id="lifeCat" style="flex:none"></span></div>
-        <div class="oi-sub" id="lifeSub" style="margin-top:5px">上门服务 · 线下收费</div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">服务信息</div>
-    <div class="info-row"><span>服务标题</span><b id="lifeTitle2">空调滤网清洗</b></div>
-    <div class="info-row"><span>订单金额</span><b id="lifeAmt">¥80.00</b></div>
-    <div class="info-row"><span>数量</span><b id="lifeCount">1 项</b></div>
-    <div class="info-row"><span>上门时间</span><b id="lifeTime">今天 15:00 上门</b></div>
-    <div class="info-row"><span>服务地址</span><b id="lifeAddr">3栋2单元501</b></div>
-    <div class="info-row"><span>下单人</span><b id="lifeName">王秀兰</b></div>
-    <div class="info-row"><span>联系电话</span><b id="lifePhone">138****5001</b></div>
-  </div>
-  <div class="card">
-    <div class="card-title">金额信息</div>
-    <div style="font-size:13px;line-height:1.8;color:#3A4150">订单金额 <b id="lifeAmt2">¥80.00</b>，线上不做收款，所有金额由线下收取。</div>
-  </div>
-  <div class="card">
-    <div class="card-title">订单日志</div>
-    <div class="timeline">
-      <div class="tl-item done"><div class="tl-t">订单提交</div><div class="tl-d" id="lifeLog1">09-09 14:20</div></div>
-      <div class="tl-item done" id="lifeLogItem2"><div class="tl-t">上门服务</div><div class="tl-d" id="lifeLog2">09-09 14:35</div></div>
-      <div class="tl-item" id="lifeLogItem3"><div class="tl-t">服务完成</div><div class="tl-d" id="lifeLog3">进行中</div></div>
-    </div>
-  </div>
-  </div>
-  <div class="bottom-bar">
-    <button class="btn btn-outline" id="lifeCall" onclick="toast('已调起拨号')">一键拨号</button>
-    <button class="btn btn-primary" id="lifeAction" onclick="askFinishLife()">确认完成</button>
-  </div>
-</section>
 
 <!--P13 设置新密码（修改密码 / 忘记密码 共用：手机号 + 验证码 + 新密码）-->
 <section class="page" id="P13">
@@ -782,34 +729,16 @@ body{
       </div>
     </div>
   </div>
-  <div class="confirm-mask" id="doneMask">
-    <div class="confirm-box">
-      <div class="cb-t" id="doneText">是否确认订单已完成？</div>
-      <div class="cb-b">
-        <button onclick="closeDone()">取消</button>
-        <button class="ok mint" onclick="doFinishLife()">确认完成</button>
-      </div>
-    </div>
-  </div>
   <div class="toast" id="toast" data-page-node-id="sqLFSPG9F04ahXDC1Avdza"></div>
 </div>
 </div>
 <script>
-const titles={P01:'账号登录',P02:'员工工作台',P03:'收益明细',P05:'我的订单',P06:'报餐单详情',P07:'托管单详情',P08:'陪诊单详情',P09:'个人资料',P10:'用户服务协议',P11:'隐私政策',P12:'生活帮手单详情',P13:'设置新密码'};
+const titles={P01:'账号登录',P02:'员工工作台',P03:'收益明细',P05:'我的订单',P06:'报餐单详情',P07:'托管单详情',P08:'陪诊单详情',P09:'个人资料',P10:'用户服务协议',P11:'隐私政策',P13:'设置新密码'};
 let current='P01',previous='P01',orderType='baocan',photoType='';
 const orders={
   baocan:[{no:'GHJ20260909-001',name:'王秀兰',room:'3栋2单元501',time:'今天 11:00-12:30',status:'待配送',cls:'wait',detail:'P06',title:'营养午餐配送',cat:'膳食配送'},{no:'GHJ20260909-013',name:'张启明',room:'3栋1单元702',time:'今天 11:00-12:30',status:'待配送',cls:'wait',detail:'P06',title:'低糖营养午餐配送',cat:'膳食配送'},{no:'GHJ20260909-014',name:'孙玉兰',room:'5栋3单元201',time:'今天 17:00-18:30',status:'待配送',cls:'wait',detail:'P06',title:'营养晚餐配送',cat:'膳食配送'},{no:'GHJ20260908-006',name:'李桂芳',room:'3栋2单元503',time:'昨天 11:00-12:30',status:'已配送',cls:'done',detail:'P06',title:'营养午餐配送',cat:'膳食配送'},{no:'GHJ20260908-004',name:'赵敏',room:'3栋2单元504',time:'昨天 17:00-18:30',status:'已配送',cls:'done',detail:'P06',title:'营养晚餐配送',cat:'膳食配送'}],
   tuoguan:[{no:'GHJ20260909-003',name:'周子涵',room:'幸福里小区',time:'今天 16:30 接回',status:'进行中',cls:'doing',detail:'P07',title:'放学接回托管',cat:'托管接送'},{no:'GHJ20260909-016',name:'郑一诺',room:'幸福里小区 北门',time:'今天 18:00 接回',status:'进行中',cls:'doing',detail:'P07',title:'放学接回托管',cat:'托管接送'},{no:'GHJ20260909-008',name:'刘思远',room:'幸福里小区',time:'今天 17:30 接回',status:'进行中',cls:'doing',detail:'P07',title:'放学接回托管',cat:'托管接送'}],
-  peizhen:[{no:'GHJ20260909-002',name:'陈志强',room:'市中心医院 心内科',time:'今天 14:00',status:'待陪诊',cls:'wait',detail:'P08',title:'心内科陪诊服务',cat:'陪诊服务'},{no:'GHJ20260909-015',name:'吴秀英',room:'市第二医院 骨科',time:'今天 15:30',status:'待陪诊',cls:'wait',detail:'P08',title:'骨科陪诊服务',cat:'陪诊服务'},{no:'GHJ20260906-011',name:'张桂英',room:'人民医院 老年科',time:'09-06 09:00',status:'已完成',cls:'done',detail:'P08',title:'老年科陪诊服务',cat:'陪诊服务'}],
-  shenghuo:[
-    {no:'GHJ20260909-006',name:'王秀兰',room:'3栋2单元501',time:'今天 15:00 上门',status:'进行中',cls:'doing',detail:'P12',title:'水龙头漏水维修',cat:'家电维修',amt:'¥90.00',count:1,phone:'138****5001',logs:['09-09 10:24','今天 15:00','进行中']},
-    {no:'GHJ20260909-007',name:'陈志强',room:'3栋2单元502',time:'今天 17:00 上门',status:'进行中',cls:'doing',detail:'P12',title:'代取快递包裹',cat:'生活代办',amt:'¥20.00',count:1,phone:'138****5002',logs:['09-09 09:12','今天 17:00','进行中']},
-    {no:'GHJ20260909-008',name:'李桂芳',room:'3栋2单元503',time:'今天 19:00 上门',status:'进行中',cls:'doing',detail:'P12',title:'空调滤网清洗',cat:'家电清洗',amt:'¥80.00',count:1,phone:'138****5003',logs:['09-08 18:47','今天 19:00','进行中']},
-    {no:'GHJ20260909-010',name:'赵敏',room:'3栋2单元504',time:'明天 10:00 上门',status:'进行中',cls:'doing',detail:'P12',title:'全屋日常保洁',cat:'家政保洁',amt:'¥150.00',count:1,phone:'138****5004',logs:['09-08 15:05','明天 10:00','进行中']},
-    {no:'GHJ20260909-005',name:'王秀兰',room:'3栋2单元501',time:'今天 15:00 上门',status:'进行中',cls:'doing',detail:'P12',title:'空调滤网清洗',cat:'家电清洗',amt:'¥80.00',count:1,phone:'138****5001',logs:['09-09 14:20','09-09 14:35','进行中']},
-    {no:'GHJ20260908-012',name:'李桂芳',room:'3栋2单元503',time:'昨天 10:00 上门',status:'已完成',cls:'done',detail:'P12',title:'水管疏通维修',cat:'家电维修',amt:'¥120.00',count:1,phone:'138****5003',logs:['09-08 09:10','09-08 09:25','09-08 10:40']},
-    {no:'GHJ20260907-009',name:'赵敏',room:'3栋2单元504',time:'09-07 14:00 上门',status:'已取消',cls:'cancel',detail:'P12',title:'纱窗更换',cat:'家电维修',amt:'¥60.00',count:2,phone:'138****5004',logs:['09-07 11:00','09-07 11:15','用户取消']}
-  ]
+  peizhen:[{no:'GHJ20260909-002',name:'陈志强',room:'市中心医院 心内科',time:'今天 14:00',status:'待陪诊',cls:'wait',detail:'P08',title:'心内科陪诊服务',cat:'陪诊服务'},{no:'GHJ20260909-015',name:'吴秀英',room:'市第二医院 骨科',time:'今天 15:30',status:'待陪诊',cls:'wait',detail:'P08',title:'骨科陪诊服务',cat:'陪诊服务'},{no:'GHJ20260906-011',name:'张桂英',room:'人民医院 老年科',time:'09-06 09:00',status:'已完成',cls:'done',detail:'P08',title:'老年科陪诊服务',cat:'陪诊服务'}]
 };
 /* 收益数据已改为按自然月结算模型（见文件末尾 revMonths） */
 function byId(id){return document.getElementById(id)}
@@ -835,8 +764,8 @@ function filterNeeds(value){
   document.querySelectorAll('#needList .order-item').forEach(item=>{const ok=!q||(item.dataset.k||'').indexOf(q)>-1;item.style.display=ok?'':'none';if(ok)shown++});
   byId('needEmpty').style.display=shown?'none':'block';
 }
-/* ===== 首页「今日待办」：聚合 膳食配送 / 陪诊服务 / 托管接送 / 生活帮手 四类待处理订单 ===== */
-const TODO_TYPES=['baocan','peizhen','tuoguan','shenghuo'];
+/* ===== 首页「今日待办」：聚合 膳食配送 / 陪诊服务 / 托管接送 三类待处理订单 ===== */
+const TODO_TYPES=['baocan','peizhen','tuoguan'];
 const TODO_STATUS=['待配送','待陪诊','进行中'];
 let needType='all';
 function todoList(type){
@@ -848,20 +777,17 @@ function renderNeeds(){
   byId('needList').innerHTML=todoList(needType).map(x=>orderCard(x.o,x.t)).join('');
   filterNeeds(byId('needSearch')?byId('needSearch').value:'');
   const n=todoList('all').length;
-  byId('needHint').textContent='4 类服务 · 共 '+n+' 单';
+  byId('needHint').textContent=TODO_TYPES.length+' 类服务 · 共 '+n+' 单';
   byId('todoNumBaocan').textContent=todoList('baocan').length;
   byId('todoNumPeizhen').textContent=todoList('peizhen').length;
   byId('todoNumTuoguan').textContent=todoList('tuoguan').length;
-  byId('todoNumShenghuo').textContent=todoList('shenghuo').length;
 }
 function switchNeed(t){needType=t||'all';document.querySelectorAll('#needTabs .otab').forEach(b=>b.classList.toggle('active',b.dataset.nt===needType));renderNeeds()}
 function switchOrder(type){orderType=type||'baocan';document.querySelectorAll('#orderTabs .otab').forEach(t=>t.classList.toggle('active',t.dataset.type===orderType));renderOrders(byId('orderSearch')?byId('orderSearch').value:'')}
 /* 服务封面：类目 → [配色, 图标色, 图标] */
-const COVER_DEF={'家政保洁':['mint','#1FA97A','sparkle'],'家电清洗':['blue','#3E86D6','drop'],'家电维修':['coral','#F0723C','wrench'],'生活代办':['amber','#D98A08','box'],'膳食配送':['mint','#1FA97A','meal'],'陪诊服务':['blue','#3E86D6','care'],'托管接送':['amber','#D98A08','bus']};
+const COVER_DEF={'膳食配送':['mint','#1FA97A','meal'],'陪诊服务':['blue','#3E86D6','care'],'托管接送':['amber','#D98A08','bus']};
 const COVER_ICON={
-  sparkle:'<path d="M11 3.4l1.6 4.3 4.3 1.6-4.3 1.6L11 15.2 9.4 10.9 5.1 9.3l4.3-1.6z"/><path d="M17.7 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>',
-  drop:'<path d="M12 3.6s5.5 5.5 5.5 9.1a5.5 5.5 0 11-11 0c0-3.6 5.5-9.1 5.5-9.1z"/><path d="M9.7 13.7a2.5 2.5 0 002.5 2.5"/>',
-  wrench:'<path d="M20.3 5.7a5 5 0 01-6.5 6.5l-6.8 6.8a1.9 1.9 0 11-2.7-2.7l6.8-6.8A5 5 0 0117.6 3l-3 3 3.9 3.9z"/>',
+  /* box：类目未命中时的通用兜底图标 */
   box:'<path d="M3.6 7.6L12 3.2l8.4 4.4v8.8L12 20.8l-8.4-4.4z"/><path d="M3.6 7.6L12 12l8.4-4.4M12 12v8.8"/>',
   meal:'<path d="M4.4 11.4h15.2a7.6 7.6 0 01-15.2 0z"/><path d="M12 4v4.6M9.3 4.4l.5 4.2M14.7 4.4l-.5 4.2"/>',
   care:'<path d="M12 20.4s-7.4-4.3-7.4-9.4a4.2 4.2 0 017.4-2.8 4.2 4.2 0 017.4 2.8c0 5.1-7.4 9.4-7.4 9.4z"/>',
@@ -881,7 +807,7 @@ function orderCard(o,t){
     +'<div class="oi-info"><div class="oi-tline"><b class="oi-title">'+title+'</b><span class="tag '+tagCls+'">'+o.status+'</span></div>'
     +'<div class="oi-sub">'+sub.join(' · ')+'</div></div></div>'
     +'<div class="oi-rows">'
-    +'<div><span>'+(t==='shenghuo'?'下单人':'服务对象')+'</span><b>'+o.name+'</b></div>'
+    +'<div><span>服务对象</span><b>'+o.name+'</b></div>'
     +'<div><span>地址</span><b>'+o.room+'</b></div>'
     +'<div><span>服务时间</span><b>'+o.time+'</b></div>'
     +(o.amt?'<div><span>订单金额</span><b>'+o.amt+'</b></div>':'')
@@ -905,7 +831,6 @@ function openOrder(detail,status,no){
   curOrder=no||null;
   go(detail);
   if(detail==='P08')applyVisitState(status);
-  if(detail==='P12')fillLife();
 }
 function finishVisit(){
   applyVisitState('已完成');
@@ -916,56 +841,9 @@ function finishVisit(){
     renderNeeds();
   }
 }
-function fillLife(){
-  const o=orders.shenghuo.find(x=>x.no===curOrder);
-  if(!o)return;
-  byId('lifeStatus').className='status-badge '+(o.cls==='done'?'done':o.cls==='cancel'?'cancel':'doing');
-  byId('lifeStatus').textContent=o.status;
-  byId('lifeNo').textContent=o.no;
-  byId('lifeTitle').textContent=o.title||'';
-  byId('lifeTitle2').textContent=o.title||'';
-  byId('lifeCat').textContent=o.cat||'';
-  const cv=orderCoverInner(o.cat);byId('lifeCover').className=cv.cls;byId('lifeCover').innerHTML=cv.svg;
-  byId('lifeSub').textContent=(o.cat?o.cat+' · ':'')+'上门服务 · 线下收费';
-  byId('lifeAmt').textContent=o.amt||'';
-  byId('lifeAmt2').textContent=o.amt||'';
-  byId('lifeCount').textContent=(o.count||1)+' 项';
-  byId('lifeTime').textContent=o.time;
-  byId('lifeAddr').textContent=o.room;
-  byId('lifeName').textContent=o.name;
-  byId('lifePhone').textContent=o.phone||'';
-  byId('lifeCall').setAttribute('onclick',"toast('已调起拨号："+(o.phone||'')+"')");
-  const st=o.status,done=st==='已完成'||st==='已取消';
-  const lg2=o.logs?o.logs[1]:'',lg3=o.logs?o.logs[2]:'';
-  byId('lifeLog1').textContent=o.logs?o.logs[0]:'';
-  byId('lifeLog2').textContent=lg2||'已上门';
-  byId('lifeLog3').textContent=st==='已取消'?'已取消':(st==='已完成'?((lg3&&lg3!=='进行中')?lg3:'已完成'):'进行中');
-  byId('lifeLogItem2').className='tl-item done';
-  byId('lifeLogItem3').className='tl-item '+(st==='已完成'?'done':'');
-  /* 生活帮手订单无需接单操作：仅「一键拨号」+「确认完成」 */
-  const act=byId('lifeAction');
-  act.textContent=st==='已取消'?'已取消':(done?'已完成':'确认完成');
-  act.disabled=done;act.style.background=done?'#B9C4CF':'';
-  act.setAttribute('onclick','askFinishLife()');
-}
-/* 确认完成：二次弹窗确认，确认后才真正完成订单 */
-function askFinishLife(){
-  if(byId('lifeAction').disabled)return;
-  byId('doneText').innerHTML='是否确认订单已完成？';
-  byId('doneMask').classList.add('show')
-}
-function closeDone(){byId('doneMask').classList.remove('show')}
-function doFinishLife(){closeDone();confirmLife()}
-function confirmLife(){
-  if(curOrder){const o=orders.shenghuo.find(x=>x.no===curOrder);if(o&&o.status==='进行中'){o.status='已完成';o.cls='done';}}
-  renderNeeds();renderOrders(byId('orderSearch')?byId('orderSearch').value:'');
-  fillLife();
-  toast('订单已确认完成，金额由线下收取');
-}
 function toast(message){const el=byId('toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
 byId('photoOverlay').addEventListener('click',e=>{if(e.target.id==='photoOverlay')e.currentTarget.classList.remove('show')});
 byId('confirmMask').addEventListener('click',e=>{if(e.target.id==='confirmMask')e.currentTarget.classList.remove('show')});
-byId('doneMask').addEventListener('click',e=>{if(e.target.id==='doneMask')closeDone()});
 /* 视口适配：宽屏时按可用高度等比缩放，保证 375:812 比例恒定且一屏看全；窄屏保持 375 基准宽度纵向滚动 */
 function fitPhone(){
   var stage=document.querySelector('.stage');
@@ -978,12 +856,12 @@ window.addEventListener('resize',fitPhone);
 fitPhone();
 /* ===== 收益筛选状态（按自然月结算） ===== */
 let revType='all';
-const revLabels={all:'全部类型','报餐单':'报餐单','托管单':'托管单','陪诊单':'陪诊单','生活帮手单':'生活帮手单'};
+const revLabels={all:'全部类型','报餐单':'报餐单','托管单':'托管单','陪诊单':'陪诊单'};
 let revMonth='2026-09';
 /* 月度结算模型：同一月份内所有记录状态一致（status: pending=待发放 / settled=已发放） */
 const revMonths=[
   {key:'2026-09',label:'2026年9月',status:'pending',items:[
-    ['生活帮手','GHJ20260909-005','09-09','+¥80.00','生活帮手单'],
+    ['托管接送','GHJ20260909-003','09-09','+¥240.00','托管单'],
     ['膳食配送','GHJ20260909-001','09-09','+¥36.00','报餐单'],
     ['陪诊服务','GHJ20260909-002','09-09','+¥180.00','陪诊单']
   ]},
@@ -1039,7 +917,7 @@ function renderMonth(){
   return h;
 }
 function renderType(){
-  const opts=[['all','全部类型'],['报餐单','报餐单'],['托管单','托管单'],['陪诊单','陪诊单'],['生活帮手单','生活帮手单']];
+  const opts=[['all','全部类型'],['报餐单','报餐单'],['托管单','托管单'],['陪诊单','陪诊单']];
   let h='<div class="sheet-hd"><div class="hd-title">选择类型</div><button class="hd-close" onclick="closeSheet()">取消</button></div>';
   h+='<div class="sheet-list">';
   for(const [v,l] of opts){
