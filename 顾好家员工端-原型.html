@@ -220,6 +220,32 @@ body{
 .info-row span{color:var(--sub);flex:none}
 .info-row b{font-weight:500;text-align:right}
 .menu-line{background:#F8FAF9;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;margin-top:8px}
+/* 附加费 */
+.extra-add{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--mint);border:1px solid rgba(58,201,154,.45);background:rgba(58,201,154,.08);border-radius:14px;padding:4px 11px;cursor:pointer;font-family:inherit}
+.extra-add:active{background:rgba(58,201,154,.2)}
+.extra-empty{border:1.5px dashed #D7DEE6;border-radius:12px;padding:16px 14px;text-align:center;cursor:pointer;background:#FAFBFC}
+.extra-empty:active{background:#F3F7F9}
+.extra-empty .ee-t{font-size:13px;font-weight:600;color:var(--txt)}
+.extra-empty .ee-s{font-size:11px;color:var(--sub);margin-top:6px;line-height:1.7}
+.extra-item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.extra-item:last-child{border-bottom:none;padding-bottom:3px}
+.extra-item .ei-th{width:44px;height:44px;border-radius:10px;flex:none;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#D8EFE6,#9EDCC6);color:#2E9E79}
+.extra-item .ei-main{flex:1;min-width:0}
+.extra-item .ei-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.extra-item .ei-sub{font-size:11px;color:var(--sub);margin-top:3px}
+.extra-item .ei-amt{font-size:15px;font-weight:700;color:var(--coral);flex:none}
+.extra-item .ei-del{flex:none;border:none;background:none;color:var(--sub);font-size:11px;cursor:pointer;padding:5px 2px;font-family:inherit}
+.extra-item .ei-del:active{color:#FF5B5B}
+.fld-lbl{font-size:12px;font-weight:600;color:var(--txt);margin:0 0 8px}
+.up-box{border:1.5px dashed #C9D3DD;border-radius:12px;background:#FAFBFC;height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.up-box .ub-t{font-size:12px;font-weight:600;color:var(--txt)}
+.up-box .ub-s{font-size:11px;color:var(--sub)}
+.up-box.filled{border-style:solid;border-color:rgba(58,201,154,.55);background:linear-gradient(135deg,#EAF8F2,#D8EFE6)}
+.confirm-box .cb-b button.ok.mint{color:var(--mint)}
+#P08 .bottom-bar .btn-outline{flex:0 0 100px}
+#P08 .bottom-bar .btn-primary{font-size:14px}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .menu-line b{color:var(--mint-dark)}
 /* 图片宫格 & 视频 */
 .img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
@@ -483,10 +509,10 @@ body{
   <div class="page-body">
   <div class="card" style="text-align:center;padding:18px 14px" data-page-node-id="QFF8nubUD8CpwVa7sEKpQZ"><div class="status-badge wait" id="visitStatus" data-page-node-id="4Kvr4a8jJ2BFNRfvItr7bP">待陪诊</div><div style="font-size:12px;color:var(--sub);margin-top:8px" data-page-node-id="lATzO0Cn1HgNDnUcuHAoJl">订单编号</div><div style="font-size:16px;font-weight:700;margin-top:3px" data-page-node-id="xIf7Jf2pbqEzI5O1EWVGhX">GHJ20260909-002</div></div>
   <div class="card" data-page-node-id="JHFQgBRz6gCSi06r5v3Qcq"><div class="card-title" data-page-node-id="HxIWWtFdobVysXXZi6OgPB">就诊信息</div><div class="info-row" data-page-node-id="wJ68brkJBTMvt4gU6sci1y"><span data-page-node-id="gWRj5ppoS4eirYQzDPNAxV">就诊人</span><b data-page-node-id="hE5qtR3894XCG8QAmiETih">陈志强</b></div><div class="info-row" data-page-node-id="D3OxtzOdnRrQP8s8Q9z921"><span data-page-node-id="tX1YvxzKkKyNrCz8ZiJhT3">就诊医院</span><b data-page-node-id="eICxiJBCxGrlZdJ6VyiHhm">市中心医院</b></div><div class="info-row" data-page-node-id="GRCLp7wfZXsBKBZcgH4Wjf"><span data-page-node-id="j9ehDQPoMYp01LQrbb5SBa">科室</span><b data-page-node-id="dfeWXpNp5PokYp6M4z7FqN">心内科</b></div><div class="info-row" data-page-node-id="DyDGYNfWrqsl04EiqP3QvU"><span data-page-node-id="7EH6DlP9epGL7WIH17rDKd">预约时间</span><b data-page-node-id="yj3TDV6R4l5p1Uky9sYCSt">2026-09-09 14:00</b></div><div class="info-row" data-page-node-id="KjJi7G5kKbt0BBNE00aJpF"><span data-page-node-id="u1OmxlbAQPEcgbF15kFCl3">集合地址</span><b data-page-node-id="tFU7f0XSYdK0JSi9zS1IFe">幸福里小区南门</b></div><div class="info-row" data-page-node-id="sZZz2hewokMU6M0EBTYFah"><span data-page-node-id="cUYUGGYzm4zGE6dHyG2ivT">联系电话</span><b data-page-node-id="hYWHVDf8kdl0CFpl4jfCgL">138****5002</b></div></div>
-  <div class="card" data-page-node-id="qXV8Vrn0bnrpfDupYtAnUS"><div class="card-title" data-page-node-id="h9uzwEdAbn23Zqvbwy7lGj">陪诊事项</div><div style="font-size:13px;line-height:1.8;color:#3A4150" data-page-node-id="22ZqLiqeZUxwoIO2noGJE0">协助挂号取号、陪同候诊、取检查报告，并记录医生交代事项。服务结束后将老人安全送回集合地址。</div></div>
-  <div class="card"><div class="card-title">金额信息</div><div class="info-row"><span>订单金额</span><b>¥180.00</b></div><div class="info-row"><span>附加金额</span><b>¥0.00</b></div><div style="font-size:12px;color:var(--sub);margin-top:6px">拍照确认完成时，可添加附加金额（类目、金额、凭证），由用户再次付款。</div></div>
+  <div class="card"><div class="card-title">金额信息</div><div class="info-row"><span>订单金额</span><b>¥180.00</b></div><div class="info-row"><span>附加费合计</span><b id="visitExtraTotal">¥0.00</b></div><div class="info-row" style="border-top:1px dashed var(--line);margin-top:5px;padding-top:10px"><span>用户应付合计</span><b id="visitPayTotal" style="color:var(--coral);font-weight:700">¥180.00</b></div></div>
+  <div class="card"><div class="card-title">附加费<button class="extra-add" id="extraAddBtn" onclick="openExtra(-1)">+ 添加</button></div><div id="visitExtraList"></div></div>
     </div>
-  <div class="bottom-bar" data-page-node-id="fds858v9eB0eU3CuKuozMg"><button class="btn btn-outline" id="visitCall" onclick="toast('已调起拨号：138****5002')" data-page-node-id="kaPImShI6g9lFm9Wst6POF">一键拨号</button><button class="btn btn-primary" id="visitAction" onclick="openPhoto('visit')" data-page-node-id="PuZSuc4yF4pIETRSIjB2Ls">拍照确认完成</button></div>
+  <div class="bottom-bar" data-page-node-id="fds858v9eB0eU3CuKuozMg"><button class="btn btn-outline" id="visitCall" onclick="toast('已调起拨号：138****5002')" data-page-node-id="kaPImShI6g9lFm9Wst6POF">一键拨号</button><button class="btn btn-primary" id="visitAction" onclick="askVisitSubmit()" data-page-node-id="PuZSuc4yF4pIETRSIjB2Ls">已完成陪诊，提交用户支付</button></div>
 </section>
 
 <!--P09 用户资料-->
@@ -720,6 +746,29 @@ body{
       </div>
     </div>
   </div>
+  <div class="overlay" id="extraOverlay">
+    <div class="sheet boardsheet">
+      <div class="sheet-hd"><span class="hd-title" id="extraTitle">添加附加费</span><button class="hd-close" onclick="closeExtra()">取消</button></div>
+      <div style="padding:16px 18px 22px">
+        <div class="fld-lbl">费用名称</div>
+        <div class="field"><input id="extraName" type="text" placeholder="如：药费、检查费、停车费" maxlength="14"></div>
+        <div class="fld-lbl">金额（元）</div>
+        <div class="field"><span style="font-size:15px;font-weight:700">¥</span><input id="extraAmt" type="number" inputmode="decimal" placeholder="0.00"></div>
+        <div class="fld-lbl">图片凭证</div>
+        <div class="up-box" id="upBox" onclick="pickVoucher()"></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:20px" onclick="saveExtra()">保存</button>
+      </div>
+    </div>
+  </div>
+  <div class="confirm-mask" id="visitMask">
+    <div class="confirm-box">
+      <div class="cb-t">是否确认陪诊已完成？<br>提交后由用户支付</div>
+      <div class="cb-b">
+        <button onclick="closeVisitMask()">取消</button>
+        <button class="ok mint" onclick="doVisitSubmit()">确认提交</button>
+      </div>
+    </div>
+  </div>
   <div class="confirm-mask" id="confirmMask">
     <div class="confirm-box">
       <div class="cb-t">确定要退出当前账号吗？<br>退出后需要重新验证登录</div>
@@ -742,7 +791,7 @@ const orders={
 };
 /* 收益数据已改为按自然月结算模型（见文件末尾 revMonths） */
 function byId(id){return document.getElementById(id)}
-function go(id,type){if(!byId(id))return;previous=current;current=id;document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));byId('navTitle').textContent=titles[id]||'';byId('navbar').classList.toggle('has-back',!['P01','P02','P05'].includes(id));byId('tabbar').style.display=['P02','P05'].includes(id)?'flex':'none';document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.page===id));if(id==='P05')switchOrder(type||orderType);if(id==='P02')renderNeeds();const sc=byId(id).querySelector('.page-body');if(sc)sc.scrollTop=0}
+function go(id,type){if(!byId(id))return;previous=current;current=id;document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));byId('navTitle').textContent=titles[id]||'';byId('navbar').classList.toggle('has-back',!['P01','P02','P05'].includes(id));byId('tabbar').style.display=['P02','P05'].includes(id)?'flex':'none';document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.page===id));if(id==='P05')switchOrder(type||orderType);if(id==='P02')renderNeeds();if(id==='P08')renderExtras();const sc=byId(id).querySelector('.page-body');if(sc)sc.scrollTop=0}
 function goBack(){if(current==='P10'||current==='P11'){go(previous);return}if(current==='P13'){go(resetFrom);return}go(previous==='P01'?'P02':previous)}
 /* ===== 协议富文本页：在小程序内新开一页（从哪进、回哪去） ===== */
 function openAgreement(id){go(id);const el=byId(id);el.classList.remove('anim-in');void el.offsetWidth;el.classList.add('anim-in')}
@@ -818,32 +867,93 @@ function filterOrders(value){renderOrders(value)}
 function openPhoto(type){photoType=type;byId('photoOverlay').classList.add('show');byId('camStep').style.display='block';byId('previewStep').style.display='none'}
 function takePhoto(){byId('camStep').style.display='none';byId('previewStep').style.display='block'}
 function retake(){takePhoto();byId('camStep').style.display='block';byId('previewStep').style.display='none'}
-function confirmPhoto(){byId('photoOverlay').classList.remove('show');if(photoType==='meal'){byId('mealStatus').className='status-badge done';byId('mealStatus').textContent='已配送';byId('mealAction').textContent='已完成配送';byId('mealAction').disabled=true;byId('mealAction').style.background='#B9C4CF';byId('mealTimeline').classList.add('done');byId('mealTimeline').querySelector('.tl-t').textContent='配送已完成';byId('mealTimeline').querySelector('.tl-d').textContent='刚刚'}if(photoType==='visit'){finishVisit()}toast('照片提交成功，订单状态已更新')}
-let curOrder=null;
+function confirmPhoto(){byId('photoOverlay').classList.remove('show');if(photoType==='meal'){byId('mealStatus').className='status-badge done';byId('mealStatus').textContent='已配送';byId('mealAction').textContent='已完成配送';byId('mealAction').disabled=true;byId('mealAction').style.background='#B9C4CF';byId('mealTimeline').classList.add('done');byId('mealTimeline').querySelector('.tl-t').textContent='配送已完成';byId('mealTimeline').querySelector('.tl-d').textContent='刚刚'}toast('照片提交成功，订单状态已更新')}
+let curOrder=null,visitLocked=false;
 function applyVisitState(status){
-  const done=status==='已完成';
-  byId('visitStatus').className='status-badge '+(done?'done':'wait');
+  const fin=status==='已完成',pay=status==='待支付';
+  visitLocked=fin||pay;
+  byId('visitStatus').className='status-badge '+(fin?'done':'wait');
   byId('visitStatus').textContent=status;
-  byId('visitAction').style.display=done?'none':'block';
-  byId('visitCall').style.width=done?'100%':'';
+  const act=byId('visitAction');
+  act.disabled=visitLocked;
+  act.style.background=visitLocked?'#B9C4CF':'';
+  act.textContent=fin?'陪诊已完成':pay?'已提交用户支付':'已完成陪诊，提交用户支付';
+  renderExtras();
 }
 function openOrder(detail,status,no){
   curOrder=no||null;
   go(detail);
   if(detail==='P08')applyVisitState(status);
 }
-function finishVisit(){
-  applyVisitState('已完成');
+/* 附加费 */
+let visitExtras={},extraEdit=-1,voucherOn=false;
+const ICON_VOUCHER='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2.5h7L17 8h3a1.5 1.5 0 011.5 1.5V19A1.5 1.5 0 0120 20.5H4A1.5 1.5 0 012.5 19V9.5A1.5 1.5 0 014 8z"/><circle cx="12" cy="13.5" r="3.5"/></svg>';
+const ICON_VOUCHER_OK='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2E9E79" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const VISIT_FEE=180;
+function extraKey(){return curOrder||'_p08'}
+function extrasOf(){const k=extraKey();if(!visitExtras[k])visitExtras[k]=[];return visitExtras[k]}
+function money(n){return '¥'+Number(n||0).toFixed(2)}
+function renderExtras(){
+  const list=extrasOf(),box=byId('visitExtraList'),add=byId('extraAddBtn');
+  add.style.display=visitLocked?'none':'';
+  box.innerHTML=list.length
+    ? list.map((e,i)=>'<div class="extra-item"'+(visitLocked?'':' onclick="openExtra('+i+')"')+'>'
+        +'<div class="ei-th">'+(e.voucher?ICON_VOUCHER_OK:ICON_VOUCHER)+'</div>'
+        +'<div class="ei-main"><div class="ei-name">'+e.name+'</div><div class="ei-sub">'+(e.voucher?'已上传图片凭证':'未上传凭证')+(visitLocked?'':' · 点击编辑')+'</div></div>'
+        +'<div class="ei-amt">'+money(e.amt)+'</div>'
+        +(visitLocked?'':'<button class="ei-del" onclick="event.stopPropagation();delExtra('+i+')">删除</button>')+'</div>').join('')
+    : '<div class="extra-empty"'+(visitLocked?'':' onclick="openExtra(-1)"')+'><div class="ee-t">暂无附加费</div><div class="ee-s">'
+        +(visitLocked?'本次陪诊未产生额外费用':'如陪诊过程中产生药费、检查费等额外支出<br>点击此处添加，可编辑名称、金额并上传图片凭证')+'</div></div>';
+  const sum=list.reduce((s,e)=>s+Number(e.amt||0),0);
+  byId('visitExtraTotal').textContent=money(sum);
+  byId('visitPayTotal').textContent=money(VISIT_FEE+sum);
+}
+function openExtra(i){
+  if(visitLocked)return;
+  extraEdit=i;
+  const e=i>=0?extrasOf()[i]:null;
+  voucherOn=!!(e&&e.voucher);
+  byId('extraTitle').textContent=e?'编辑附加费':'添加附加费';
+  byId('extraName').value=e?e.name:'';
+  byId('extraAmt').value=e?e.amt:'';
+  renderUpBox();
+  byId('extraOverlay').classList.add('show');
+}
+function closeExtra(){byId('extraOverlay').classList.remove('show')}
+function renderUpBox(){
+  const b=byId('upBox');
+  b.className='up-box'+(voucherOn?' filled':'');
+  b.innerHTML=voucherOn?(ICON_VOUCHER_OK+'<div class="ub-t">已上传图片凭证</div><div class="ub-s">点击可移除 / 重新上传</div>'):(ICON_VOUCHER+'<div class="ub-t">点击上传图片凭证</div><div class="ub-s">支持拍照或从相册选择</div>');
+}
+function pickVoucher(){if(visitLocked)return;voucherOn=!voucherOn;renderUpBox();toast(voucherOn?'图片凭证已上传':'已移除图片凭证')}
+function saveExtra(){
+  if(visitLocked)return;
+  const name=(byId('extraName').value||'').trim(),amt=parseFloat(byId('extraAmt').value),editing=extraEdit>=0;
+  if(!name){toast('请填写费用名称');return}
+  if(!(amt>0)){toast('请填写正确的金额');return}
+  const list=extrasOf(),item={name:name,amt:amt,voucher:voucherOn};
+  if(editing)list[extraEdit]=item;else list.push(item);
+  closeExtra();renderExtras();toast(editing?'附加费已更新':'附加费已添加');
+}
+function delExtra(i){if(visitLocked)return;extrasOf().splice(i,1);renderExtras();toast('已删除该附加费')}
+function askVisitSubmit(){if(byId('visitAction').disabled)return;byId('visitMask').classList.add('show')}
+function closeVisitMask(){byId('visitMask').classList.remove('show')}
+function doVisitSubmit(){
+  closeVisitMask();
+  applyVisitState('待支付');
   if(curOrder){
     const o=orders.peizhen.find(x=>x.no===curOrder);
-    if(o){o.status='已完成';o.cls='done';}
+    if(o){o.status='待支付';o.cls='wait';}
     renderOrders(byId('orderSearch')?byId('orderSearch').value:'');
     renderNeeds();
   }
+  toast('已提交用户支付，等待用户付款');
 }
 function toast(message){const el=byId('toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
 byId('photoOverlay').addEventListener('click',e=>{if(e.target.id==='photoOverlay')e.currentTarget.classList.remove('show')});
 byId('confirmMask').addEventListener('click',e=>{if(e.target.id==='confirmMask')e.currentTarget.classList.remove('show')});
+byId('visitMask').addEventListener('click',e=>{if(e.target.id==='visitMask')e.currentTarget.classList.remove('show')});
+byId('extraOverlay').addEventListener('click',e=>{if(e.target.id==='extraOverlay')e.currentTarget.classList.remove('show')});
 /* 视口适配：宽屏时按可用高度等比缩放，保证 375:812 比例恒定且一屏看全；窄屏保持 375 基准宽度纵向滚动 */
 function fitPhone(){
   var stage=document.querySelector('.stage');
