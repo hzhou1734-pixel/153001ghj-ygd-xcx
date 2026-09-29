@@ -499,7 +499,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
   <div class="card" style="text-align:center;padding:18px 14px" data-page-node-id="84NtbrGdBkBRQ4pvio4NCo"><div class="status-badge doing" id="tgStatus" data-page-node-id="y6chCzpvUMOuqqGvjMPWoH">进行中</div><div style="font-size:12px;color:var(--sub);margin-top:8px" data-page-node-id="SgvmtNOR0BSiOQdccaPxsd">托管日期</div><div style="font-size:16px;font-weight:700;margin-top:3px" data-page-node-id="18O8DkA75OWJ2rAWtuoSqW">2026-09-09</div></div>
   <div class="card" data-page-node-id="lOMl7oNxpU128ptFr8D7VB"><div class="card-title" data-page-node-id="sFJVqu1Bf8aj7zjyzQliEW">托管接送信息</div><div class="info-row" data-page-node-id="9LhFXfu1qw5CUDEodnLh9W"><span data-page-node-id="PzweSDO24neVR7Od5ozMAM">托管项目标题</span><b data-page-node-id="6iJZdWlHt35KA0CeWymkaI">放学接送托管</b></div><div class="info-row" data-page-node-id="VutGcyAb5o5CZC9xShHqrA"><span data-page-node-id="j2ipbn1R4cPnfxajAGnXqN">托管人数</span><b data-page-node-id="0TtqFOdExX2sDmJzIy8ji5">1 人</b></div><div class="info-row" data-page-node-id="ey5X3ntKgD6LhlkPtDInwx"><span data-page-node-id="GtAp2oyEYNAiMR1IMCNLJ6">接送地址</span><b data-page-node-id="snzzXF7oYhNz2lykq7jOHf">幸福里小区 → 幸福里实验小学</b></div><div class="info-row" data-page-node-id="tmcHO9RH8Wm5lUpBgEAJXG"><span data-page-node-id="I1IJmoznDbQpCVh57ac0xd">接送时间</span><b data-page-node-id="P8TErCpXwSWLDxVWBJLz23">2026-09-09 16:30 接回</b></div><div class="info-row" data-page-node-id="JovVMAEuGUfy581OTNmyDK"><span data-page-node-id="4tj6Wt2BPJh5FtjnBx2fz5">家长电话</span><b data-page-node-id="QOiOeUfvtuSFf2iI9kI8di">139****6002</b></div></div>
   <div class="card" data-page-node-id="qsOAXP00E4dBkWi8NiINp4"><div class="card-title" data-page-node-id="ahPTEioOYKPHyAZPGRnvCy">服务要求</div><div style="font-size:13px;line-height:1.8;color:#3A4150" data-page-node-id="FuaODp3rX9L4s53UsW3YBZ">接到孩子后先确认身份，途中注意安全，到家后通知家长。若遇特殊情况请及时联系家长及管理员。</div></div>
-  <div class="card"><div class="card-title">订单日志</div><div class="timeline"><div class="tl-item done"><div class="tl-t">派单时间</div><div class="tl-d">09-09 15:40</div></div><div class="tl-item" id="tgEnd"><div class="tl-t">接送结束</div><div class="tl-d">待完成</div></div></div></div>
+  <div class="card"><div class="card-title">订单日志</div><div class="timeline"><div class="tl-item done"><div class="tl-t">派单时间</div><div class="tl-d">09-09 15:40</div></div><div class="tl-item" id="tgEnd"><div class="tl-t">已完成</div><div class="tl-d">待完成</div></div></div></div>
     </div>
   <div class="bottom-bar" data-page-node-id="mrWvyvDM6pliYNa42s9F9b"><button class="btn btn-outline" id="tgCall" onclick="toast('已调起拨号：139****6002')" data-page-node-id="WFdfWFqADfXrwLkEy329RC">联系家长</button><button class="btn btn-primary" id="tgAction" onclick="openPhoto('tuoguan')">确认完成</button></div>
 </section>
@@ -896,12 +896,12 @@ function applyTuoguanState(status){
   if(done){
     const end=byId('tgEnd');
     end.classList.add('done');
-    end.querySelector('.tl-t').textContent='接送结束';
+    end.querySelector('.tl-t').textContent='已完成';
     end.querySelector('.tl-d').textContent='刚刚';
   }else{
     const end=byId('tgEnd');
     end.classList.remove('done');
-    end.querySelector('.tl-t').textContent='接送结束';
+    end.querySelector('.tl-t').textContent='已完成';
     end.querySelector('.tl-d').textContent='待完成';
   }
 }
