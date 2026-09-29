@@ -163,13 +163,6 @@ body{
 .oi-rows span{color:var(--sub);flex:none}
 .oi-rows b{font-weight:500;text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .empty{display:none;text-align:center;padding:48px 0;color:var(--sub);font-size:13px}
-/* 收益：月度结算状态横幅 */
-.rev-banner{display:flex;align-items:center;gap:8px;margin:12px 12px 4px;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:600}
-.rev-banner.pending{background:rgba(255,107,107,.08);color:var(--coral)}
-.rev-banner.settled{background:rgba(58,201,154,.08);color:var(--mint)}
-.rev-banner .rb-dot{width:8px;height:8px;border-radius:50%}
-.rev-banner.pending .rb-dot{background:var(--coral)}
-.rev-banner.settled .rb-dot{background:var(--mint)}
 .mn-st{font-style:normal;font-size:11px;font-weight:500;margin-left:8px;padding:1px 6px;border-radius:6px}
 .mn-st.coral{background:rgba(255,107,107,.12);color:var(--coral)}
 .mn-st.mint{background:rgba(58,201,154,.12);color:var(--mint)}
@@ -1027,8 +1020,7 @@ function renderRevenue(){
   let list=m.items;
   if(revType!=='all')list=list.filter(r=>r[4]===revType);
   const pend=m.status==='pending';
-  const banner='<div class="rev-banner '+(pend?'pending':'settled')+'"><span class="rb-dot"></span>'+(m.label+' 收益'+(pend?'待发放':'已发放')+'（按自然月结算）')+'</div>';
-  byId('revList').innerHTML=banner+(list.length?list.map(r=>'<div class="rev-item"><div class="ri-main"><div class="ri-t">'+r[0]+'</div><div class="ri-s">'+r[1]+' · '+r[2]+'</div></div><span class="tag '+(pend?'coral':'mint')+'">'+(pend?'待发放':'已发放')+'</span><div class="ri-amt" style="color:'+(pend?'var(--coral)':'var(--mint)')+'">'+r[3]+'</div></div>').join(''):'');
+  byId('revList').innerHTML=(list.length?list.map(r=>'<div class="rev-item"><div class="ri-main"><div class="ri-t">'+r[0]+'</div><div class="ri-s">'+r[1]+' · '+r[2]+'</div></div><span class="tag '+(pend?'coral':'mint')+'">'+(pend?'待发放':'已发放')+'</span><div class="ri-amt" style="color:'+(pend?'var(--coral)':'var(--mint)')+'">'+r[3]+'</div></div>').join(''):'');
   byId('revEmpty').style.display=list.length?'none':'block';
   byId('typeText').textContent=revLabels[revType]||'全部类型';
   byId('dateText').textContent=m.label;
