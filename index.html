@@ -240,12 +240,32 @@ body{
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .menu-line b{color:var(--mint-dark)}
-/* 图片宫格 & 视频 */
-.img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.img-ph{aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,#D8EFE6,#BFE3D5);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.video-ph{margin-top:10px;aspect-ratio:16/9;border-radius:12px;background:linear-gradient(135deg,#2A3440,#3D4B5C);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
-.video-ph::after{content:'';position:absolute;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.25)}
-.video-ph .play{position:absolute;width:0;height:0;border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;z-index:2;margin-left:3px}
+/* 用户上传资料（图片宫格 + 视频封面） */
+.ug-sub{font-size:11px;color:var(--sub);margin-bottom:8px}
+.ug-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ug-th{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#EEF2F5;border:1px solid var(--line);cursor:pointer}
+.ug-th img{width:100%;height:100%;object-fit:cover;display:block}
+.ug-tag{position:absolute;left:0;right:0;bottom:0;padding:11px 5px 4px;font-size:9px;line-height:1.2;color:#fff;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.66));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ug-video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#2A3440;cursor:pointer;margin-top:2px}
+.ug-video img{width:100%;height:100%;object-fit:cover;display:block}
+.ug-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center}
+.ug-play::after{content:'';width:0;height:0;border-left:13px solid #fff;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:3px}
+.ug-dur{position:absolute;right:8px;bottom:8px;font-size:10px;color:#fff;background:rgba(0,0,0,.58);padding:2px 7px;border-radius:6px;font-variant-numeric:tabular-nums}
+.ug-empty{border:1.5px dashed #D7DEE6;border-radius:12px;padding:16px 14px;text-align:center;background:#FAFBFC}
+.ug-empty .ue-t{font-size:13px;font-weight:600;color:var(--txt)}
+.ug-empty .ue-s{font-size:11px;color:var(--sub);margin-top:6px;line-height:1.7}
+/* 全屏媒体查看层 */
+.media-viewer{position:absolute;inset:0;background:rgba(0,0,0,.86);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:60;padding:0 0 10px}
+.media-viewer.show{display:flex;animation:fadeIn .18s ease}
+.media-viewer .mv-img{max-width:80%;max-height:58%;border-radius:14px;display:block;box-shadow:0 10px 34px rgba(0,0,0,.55)}
+.media-viewer .mv-video{position:relative;width:80%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#111;box-shadow:0 10px 34px rgba(0,0,0,.55)}
+.media-viewer .mv-video img{width:100%;height:100%;object-fit:cover;display:block}
+.media-viewer .mv-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.media-viewer .mv-play::after{content:'';width:0;height:0;border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px}
+.media-viewer .mv-dur{position:absolute;right:10px;bottom:10px;font-size:11px;color:#fff;background:rgba(0,0,0,.6);padding:3px 8px;border-radius:7px;font-variant-numeric:tabular-nums}
+.media-viewer .mv-cap{margin-top:16px;font-size:13px;font-weight:600;color:#fff}
+.media-viewer .mv-tip{margin-top:6px;font-size:11px;color:#fff;opacity:.55}
+.media-viewer .mv-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.16);border:none;color:#fff;font-size:16px;line-height:1;cursor:pointer}
 /* 弹层 */
 .overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:50}
 .overlay.show{display:flex}
@@ -501,6 +521,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
   <div class="page-body">
   <div class="card" style="text-align:center;padding:18px 14px" data-page-node-id="QFF8nubUD8CpwVa7sEKpQZ"><div class="status-badge wait" id="visitStatus" data-page-node-id="4Kvr4a8jJ2BFNRfvItr7bP">待陪诊</div><div style="font-size:12px;color:var(--sub);margin-top:8px" data-page-node-id="lATzO0Cn1HgNDnUcuHAoJl">订单编号</div><div style="font-size:16px;font-weight:700;margin-top:3px" data-page-node-id="xIf7Jf2pbqEzI5O1EWVGhX">GHJ20260909-002</div></div>
   <div class="card" data-page-node-id="JHFQgBRz6gCSi06r5v3Qcq"><div class="card-title" data-page-node-id="HxIWWtFdobVysXXZi6OgPB">就诊信息</div><div class="info-row" data-page-node-id="wJ68brkJBTMvt4gU6sci1y"><span data-page-node-id="gWRj5ppoS4eirYQzDPNAxV">就诊人</span><b data-page-node-id="hE5qtR3894XCG8QAmiETih">陈志强</b></div><div class="info-row" data-page-node-id="D3OxtzOdnRrQP8s8Q9z921"><span data-page-node-id="tX1YvxzKkKyNrCz8ZiJhT3">就诊医院</span><b data-page-node-id="eICxiJBCxGrlZdJ6VyiHhm">市中心医院</b></div><div class="info-row" data-page-node-id="GRCLp7wfZXsBKBZcgH4Wjf"><span data-page-node-id="j9ehDQPoMYp01LQrbb5SBa">科室</span><b data-page-node-id="dfeWXpNp5PokYp6M4z7FqN">心内科</b></div><div class="info-row" data-page-node-id="DyDGYNfWrqsl04EiqP3QvU"><span data-page-node-id="7EH6DlP9epGL7WIH17rDKd">预约时间</span><b data-page-node-id="yj3TDV6R4l5p1Uky9sYCSt">2026-09-09 14:00</b></div><div class="info-row" data-page-node-id="KjJi7G5kKbt0BBNE00aJpF"><span data-page-node-id="u1OmxlbAQPEcgbF15kFCl3">集合地址</span><b data-page-node-id="tFU7f0XSYdK0JSi9zS1IFe">幸福里小区南门</b></div><div class="info-row" data-page-node-id="sZZz2hewokMU6M0EBTYFah"><span data-page-node-id="cUYUGGYzm4zGE6dHyG2ivT">联系电话</span><b data-page-node-id="hYWHVDf8kdl0CFpl4jfCgL">138****5002</b></div></div>
+  <div class="card"><div class="card-title">用户上传资料<span class="more" id="visitMediaHint"></span></div><div id="visitMediaList"></div></div>
   <div class="card"><div class="card-title">金额信息</div><div class="info-row"><span>订单金额</span><b>¥180.00</b></div><div class="info-row"><span>附加费合计</span><b id="visitExtraTotal">¥0.00</b></div><div class="info-row" style="border-top:1px dashed var(--line);margin-top:5px;padding-top:10px"><span>用户应付合计</span><b id="visitPayTotal" style="color:var(--coral);font-weight:700">¥180.00</b></div></div>
   <div class="card"><div class="card-title">附加费<button class="extra-add" id="extraAddBtn" onclick="openExtra(-1)">+ 添加</button></div><div id="visitExtraList"></div></div>
     </div>
@@ -752,6 +773,17 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
       </div>
     </div>
   </div>
+  <div class="media-viewer" id="mediaViewer" onclick="closeMedia(event)">
+    <button class="mv-close" onclick="closeMedia()">&#10005;</button>
+    <img class="mv-img" id="mvImg" alt="" style="display:none">
+    <div class="mv-video" id="mvVideo" style="display:none">
+      <img id="mvCover" alt="">
+      <div class="mv-play" onclick="event.stopPropagation();toast('视频播放中…')"></div>
+      <span class="mv-dur" id="mvDur"></span>
+    </div>
+    <div class="mv-cap" id="mvCap"></div>
+    <div class="mv-tip">点击空白处关闭</div>
+  </div>
   <div class="confirm-mask" id="visitMask">
     <div class="confirm-box">
       <div class="cb-t">是否确认陪诊已完成？<br>提交后由用户支付</div>
@@ -876,6 +908,7 @@ function applyVisitState(status){
   act.style.background=visitLocked?'#B9C4CF':'';
   act.textContent=fin?'陪诊已完成':pay?'已提交用户支付':'已完成陪诊，提交用户支付';
   renderExtras();
+  renderMedia();
 }
 function applyTuoguanState(status){
   const done=status==='已完成';
@@ -963,6 +996,110 @@ function saveExtra(){
   closeExtra();renderExtras();toast(editing?'附加费已更新':'附加费已添加');
 }
 function delExtra(i){if(visitLocked)return;extrasOf().splice(i,1);renderExtras();toast('已删除该附加费')}
+/* ===== 用户上传资料（图片 / 视频）===== */
+const svgURI=s=>'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s);
+const MED_RECORD=svgURI('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">'
++'<rect width="300" height="300" fill="#EEF3F1"/>'
++'<rect x="24" y="18" width="252" height="264" rx="14" fill="#FFFFFF" stroke="#E2EAE6"/>'
++'<path d="M24 32a14 14 0 0114-14h224a14 14 0 0114 14v36H24z" fill="#2FB287"/>'
++'<text x="44" y="56" font-family="sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">\u95e8\u8bca\u75c5\u5386</text>'
++'<circle cx="238" cy="45" r="14" fill="#FFFFFF" opacity=".22"/>'
++'<path d="M231.5 45l4.5 4.5 9-9.5" stroke="#FFFFFF" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
++'<rect x="44" y="86" width="118" height="10" rx="5" fill="#E4EBE8"/>'
++'<rect x="44" y="108" width="212" height="8" rx="4" fill="#EDF2F0"/>'
++'<rect x="44" y="126" width="188" height="8" rx="4" fill="#EDF2F0"/>'
++'<rect x="44" y="144" width="204" height="8" rx="4" fill="#EDF2F0"/>'
++'<rect x="44" y="162" width="148" height="8" rx="4" fill="#EDF2F0"/>'
++'<rect x="44" y="188" width="92" height="10" rx="5" fill="#E4EBE8"/>'
++'<rect x="44" y="210" width="212" height="8" rx="4" fill="#EDF2F0"/>'
++'<rect x="44" y="228" width="170" height="8" rx="4" fill="#EDF2F0"/>'
++'<circle cx="224" cy="242" r="31" fill="none" stroke="#E8735F" stroke-width="3" opacity=".78"/>'
++'<text x="224" y="247" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#E8735F" opacity=".85">\u5df2\u6838\u5bf9</text>'
++'</svg>');
+const MED_REPORT=svgURI('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">'
++'<rect width="300" height="300" fill="#EFF4F9"/>'
++'<rect x="24" y="18" width="252" height="264" rx="14" fill="#FFFFFF" stroke="#E1E8F1"/>'
++'<path d="M24 32a14 14 0 0114-14h224a14 14 0 0114 14v36H24z" fill="#4A90D9"/>'
++'<text x="44" y="56" font-family="sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">\u68c0\u67e5\u62a5\u544a\u5355</text>'
++'<rect x="44" y="86" width="104" height="10" rx="5" fill="#E3EAF3"/>'
++'<rect x="44" y="108" width="212" height="8" rx="4" fill="#EEF4FA"/>'
++'<path d="M44 140h212" stroke="#E6EDF5" stroke-width="1"/>'
++'<path d="M44 160h212M44 180h212" stroke="#EDF3F9" stroke-width="1"/>'
++'<polyline points="46,160 76,160 88,132 100,186 112,160 142,160 154,142 166,160 214,160 226,148 238,160" fill="none" stroke="#4A90D9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
++'<rect x="44" y="204" width="212" height="8" rx="4" fill="#EEF4FA"/>'
++'<rect x="44" y="222" width="176" height="8" rx="4" fill="#EEF4FA"/>'
++'<rect x="44" y="242" width="212" height="30" rx="9" fill="#EAF3FB"/>'
++'<text x="58" y="262" font-family="sans-serif" font-size="13" font-weight="600" fill="#2F6FA8">\u7ed3\u8bba\uff1a\u7aa6\u6027\u5fc3\u5f8b</text>'
++'</svg>');
+const MED_CARD=svgURI('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">'
++'<defs><linearGradient id="cg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3FB994"/><stop offset="1" stop-color="#1E8A69"/></linearGradient></defs>'
++'<rect width="300" height="300" fill="#EDF3EF"/>'
++'<rect x="30" y="86" width="240" height="152" rx="18" fill="url(#cg)"/>'
++'<rect x="30" y="86" width="240" height="152" rx="18" fill="none" stroke="#000000" stroke-opacity=".07"/>'
++'<rect x="54" y="120" width="36" height="28" rx="7" fill="#F3D689"/>'
++'<path d="M54 134h36M70 120v28" stroke="#D8B45C" stroke-width="1.6"/>'
++'<circle cx="240" cy="116" r="14" fill="#FFFFFF" opacity=".22"/>'
++'<path d="M240 108v16M232 116h16" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".9"/>'
++'<text x="54" y="182" font-family="sans-serif" font-size="16" font-weight="700" fill="#FFFFFF">\u793e\u4f1a\u4fdd\u969c\u5361</text>'
++'<text x="54" y="208" font-family="sans-serif" font-size="13" fill="#FFFFFF" opacity=".88">**** **** **** 3612</text>'
++'</svg>');
+const MED_VIDEO=svgURI('<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270">'
++'<defs><linearGradient id="vg" x1="0" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#4A6480"/><stop offset="1" stop-color="#1F2C38"/></linearGradient></defs>'
++'<rect width="480" height="270" fill="url(#vg)"/>'
++'<rect y="196" width="480" height="74" fill="#1A2530"/>'
++'<path d="M0 196h480" stroke="#5C7791" stroke-width="2" opacity=".55"/>'
++'<rect x="58" y="46" width="98" height="150" rx="7" fill="#5B7791" opacity=".75"/>'
++'<rect x="70" y="58" width="74" height="138" rx="5" fill="#2B3B4A"/>'
++'<rect x="324" y="46" width="98" height="150" rx="7" fill="#5B7791" opacity=".75"/>'
++'<rect x="336" y="58" width="74" height="138" rx="5" fill="#2B3B4A"/>'
++'<rect x="196" y="36" width="88" height="58" rx="10" fill="#FFFFFF" opacity=".93"/>'
++'<path d="M240 50v30M225 65h30" stroke="#2FB287" stroke-width="6" stroke-linecap="round"/>'
++'<rect x="186" y="164" width="108" height="32" rx="8" fill="#33475A"/>'
++'<circle cx="196" cy="196" r="7" fill="#22303D"/><circle cx="284" cy="196" r="7" fill="#22303D"/>'
++'<path d="M0 0h480v270H0z" fill="#0B1319" opacity=".12"/>'
++'</svg>');
+const VISIT_MEDIA_DEF=[
+  {type:'img',name:'\u95e8\u8bca\u75c5\u5386',src:MED_RECORD},
+  {type:'img',name:'\u68c0\u67e5\u62a5\u544a\u5355',src:MED_REPORT},
+  {type:'img',name:'\u533b\u4fdd\u5361',src:MED_CARD},
+  {type:'video',name:'\u5c31\u8bca\u8d44\u6599\u89c6\u9891',dur:'00:18',src:MED_VIDEO}
+];
+let visitMedia={};
+function visitMediaOf(no){const k=no||'_p08';return (k in visitMedia)?visitMedia[k]:VISIT_MEDIA_DEF}
+function renderMedia(){
+  const m=visitMediaOf(curOrder),box=byId('visitMediaList'),hint=byId('visitMediaHint');
+  const imgs=m.filter(x=>x.type==='img'),vids=m.filter(x=>x.type==='video');
+  hint.textContent=m.length?imgs.length+' \u5f20\u56fe\u7247'+(vids.length?' \u00b7 '+vids.length+' \u4e2a\u89c6\u9891':''):'\u6682\u65e0';
+  if(!m.length){
+    box.innerHTML='<div class="ug-empty"><div class="ue-t">\u7528\u6237\u6682\u672a\u4e0a\u4f20\u56fe\u7247\u6216\u89c6\u9891</div><div class="ue-s">\u4e0b\u5355\u65f6\u7528\u6237\u53ef\u4e0a\u4f20\u75c5\u5386\u3001\u68c0\u67e5\u62a5\u544a\u7b49\u8d44\u6599</div></div>';
+    return;
+  }
+  let h='';
+  if(imgs.length){
+    h+='<div class="ug-sub">\u56fe\u7247\uff08'+imgs.length+' \u5f20 \u00b7 \u7528\u6237\u4e0b\u5355\u4e0a\u4f20\uff09</div><div class="ug-grid">'
+      +imgs.map((it)=>'<div class="ug-th" onclick="openMedia(\'img\',\''+it.name+'\')"><img src="'+it.src+'" alt="'+it.name+'"><span class="ug-tag">'+it.name+'</span></div>').join('')
+      +'</div>';
+  }
+  if(vids.length){
+    h+='<div class="ug-sub"'+(imgs.length?' style="margin-top:14px"':'')+'>\u89c6\u9891\uff08'+vids[0].dur+' \u00b7 \u7528\u6237\u4e0b\u5355\u4e0a\u4f20\uff09</div>'
+      +vids.map((it)=>'<div class="ug-video" onclick="openMedia(\'video\',\''+it.name+'\')"><img src="'+it.src+'" alt="'+it.name+'"><div class="ug-play"></div><span class="ug-dur">'+it.dur+'</span></div>').join('');
+  }
+  box.innerHTML=h;
+}
+function openMedia(kind,name){
+  const it=visitMediaOf(curOrder).find(x=>x.name===name);if(!it)return;
+  const img=byId('mvImg'),vid=byId('mvVideo');
+  if(kind==='video'){
+    img.style.display='none';vid.style.display='block';
+    byId('mvCover').src=it.src;byId('mvDur').textContent=it.dur||'';
+  }else{
+    vid.style.display='none';img.style.display='block';img.src=it.src;
+  }
+  byId('mvCap').textContent=it.name;
+  byId('mediaViewer').classList.add('show');
+}
+function closeMedia(e){if(e&&e.target&&e.target.id&&e.target.id!=='mediaViewer')return;byId('mediaViewer').classList.remove('show')}
+byId('mediaViewer').addEventListener('click',e=>{if(e.target.id==='mediaViewer')e.currentTarget.classList.remove('show')});
 function askVisitSubmit(){if(byId('visitAction').disabled)return;byId('visitMask').classList.add('show')}
 function closeVisitMask(){byId('visitMask').classList.remove('show')}
 function doVisitSubmit(){
