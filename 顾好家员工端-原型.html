@@ -245,7 +245,6 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .ug-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .ug-th{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#EEF2F5;border:1px solid var(--line);cursor:pointer}
 .ug-th img{width:100%;height:100%;object-fit:cover;display:block}
-.ug-tag{position:absolute;left:0;right:0;bottom:0;padding:11px 5px 4px;font-size:9px;line-height:1.2;color:#fff;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.66));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ug-video{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#2A3440;cursor:pointer;margin-top:2px}
 .ug-video img{width:100%;height:100%;object-fit:cover;display:block}
 .ug-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center}
@@ -1076,12 +1075,12 @@ function renderMedia(){
   }
   let h='';
   if(imgs.length){
-    h+='<div class="ug-sub">\u56fe\u7247\uff08'+imgs.length+' \u5f20 \u00b7 \u7528\u6237\u4e0b\u5355\u4e0a\u4f20\uff09</div><div class="ug-grid">'
-      +imgs.map((it)=>'<div class="ug-th" onclick="openMedia(\'img\',\''+it.name+'\')"><img src="'+it.src+'" alt="'+it.name+'"><span class="ug-tag">'+it.name+'</span></div>').join('')
+    h+='<div class="ug-sub">\u56fe\u7247</div><div class="ug-grid">'
+      +imgs.map((it)=>'<div class="ug-th" onclick="openMedia(\'img\',\''+it.name+'\')"><img src="'+it.src+'" alt="'+it.name+'"></div>').join('')
       +'</div>';
   }
   if(vids.length){
-    h+='<div class="ug-sub"'+(imgs.length?' style="margin-top:14px"':'')+'>\u89c6\u9891\uff08'+vids[0].dur+' \u00b7 \u7528\u6237\u4e0b\u5355\u4e0a\u4f20\uff09</div>'
+    h+='<div class="ug-sub"'+(imgs.length?' style="margin-top:14px"':'')+'>\u89c6\u9891</div>'
       +vids.map((it)=>'<div class="ug-video" onclick="openMedia(\'video\',\''+it.name+'\')"><img src="'+it.src+'" alt="'+it.name+'"><div class="ug-play"></div><span class="ug-dur">'+it.dur+'</span></div>').join('');
   }
   box.innerHTML=h;
