@@ -231,7 +231,7 @@ body{
 .extra-item .ei-del:active{color:#FF5B5B}
 .fld-lbl{font-size:12px;font-weight:600;color:var(--txt);margin:0 0 8px}
 .fld-tip{font-size:11px;color:var(--sub);margin-top:8px;line-height:1.6}
-/* 托管服务环节标签（接 / 送 / 看护） */
+/* 托管服务类型标签（接 / 送 / 看护，一份订单只有一种） */
 .svc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;justify-content:center}
 .order-item .svc-tags{justify-content:flex-start;margin-top:7px}
 .svc-tag{font-size:10px;line-height:1;padding:4px 8px;border-radius:6px;font-weight:600;white-space:nowrap}
@@ -832,7 +832,7 @@ const titles={P01:'账号登录',P02:'员工工作台',P03:'收益明细',P05:'�
 let current='P01',previous='P01',orderType='baocan',photoType='';
 const orders={
   baocan:[{no:'GHJ20260909-001',name:'王秀兰',room:'3栋2单元501',time:'今天 11:00-12:30',status:'待配送',cls:'wait',detail:'P06',title:'营养午餐配送',cat:'膳食配送'},{no:'GHJ20260909-013',name:'张启明',room:'3栋1单元702',time:'今天 11:00-12:30',status:'待配送',cls:'wait',detail:'P06',title:'低糖营养午餐配送',cat:'膳食配送'},{no:'GHJ20260909-014',name:'孙玉兰',room:'5栋3单元201',time:'今天 17:00-18:30',status:'待配送',cls:'wait',detail:'P06',title:'营养晚餐配送',cat:'膳食配送'},{no:'GHJ20260908-006',name:'李桂芳',room:'3栋2单元503',time:'昨天 11:00-12:30',status:'已配送',cls:'done',detail:'P06',title:'营养午餐配送',cat:'膳食配送'},{no:'GHJ20260908-004',name:'赵敏',room:'3栋2单元504',time:'昨天 17:00-18:30',status:'已配送',cls:'done',detail:'P06',title:'营养晚餐配送',cat:'膳食配送'}],
-  tuoguan:[{no:'GHJ20260909-003',name:'周子涵',room:'幸福里小区',time:'今天 16:30 接回',status:'进行中',cls:'doing',detail:'P07',title:'放学接送托管',cat:'托管接送',svc:['接','送']},{no:'GHJ20260909-016',name:'郑一诺',room:'幸福里小区 北门',time:'今天 18:00 接回',status:'进行中',cls:'doing',detail:'P07',title:'放学接回+看护托管',cat:'托管接送',svc:['接','看护']},{no:'GHJ20260909-008',name:'刘思远',room:'幸福里小区',time:'今天 17:30 接回',status:'进行中',cls:'doing',detail:'P07',title:'放学看护托管',cat:'托管接送',svc:['看护']}],
+  tuoguan:[{no:'GHJ20260909-003',name:'周子涵',room:'幸福里小区',time:'今天 16:30 接回',status:'进行中',cls:'doing',detail:'P07',title:'放学接回托管',cat:'托管接送',svc:'接'},{no:'GHJ20260909-016',name:'郑一诺',room:'幸福里小区 北门',time:'今天 18:00 接回',status:'进行中',cls:'doing',detail:'P07',title:'放学看护托管',cat:'托管接送',svc:'看护'},{no:'GHJ20260909-008',name:'刘思远',room:'幸福里小区',time:'今天 17:30 送返',status:'进行中',cls:'doing',detail:'P07',title:'放学送返托管',cat:'托管接送',svc:'送'}],
   peizhen:[{no:'GHJ20260909-002',name:'陈志强',room:'市中心医院 心内科',time:'今天 14:00',status:'待陪诊',cls:'wait',detail:'P08',title:'心内科陪诊服务',cat:'陪诊服务'},{no:'GHJ20260909-015',name:'吴秀英',room:'市第二医院 骨科',time:'今天 15:30',status:'待陪诊',cls:'wait',detail:'P08',title:'骨科陪诊服务',cat:'陪诊服务'},{no:'GHJ20260906-011',name:'张桂英',room:'人民医院 老年科',time:'09-06 09:00',status:'已完成',cls:'done',detail:'P08',title:'老年科陪诊服务',cat:'陪诊服务'}]
 };
 /* 收益数据已改为按自然月结算模型（见文件末尾 revMonths） */
@@ -896,8 +896,8 @@ function orderCard(o,t){
   const title=o.title||({baocan:'营养配餐配送',peizhen:'陪诊服务',tuoguan:'托管接送服务'}[t]||'服务订单');
   const tagCls=o.cls==='wait'?'coral':o.cls==='done'?'mint':o.cls==='cancel'?'cancel':'blue';
   const sub=[cat];if(t!=='tuoguan')sub.push('单号 '+o.no);
-  const svcHTML=(t==='tuoguan'&&o.svc&&o.svc.length)?'<div class="svc-tags">'+svcTagsHTML(o.svc)+'</div>':'';
-  const dk=' data-k="'+[o.no,o.name,o.room,o.time,o.status,title,cat,(o.svc||[]).join(','),o.phone||''].join(' ').toLowerCase()+'"';
+  const svcHTML=(t==='tuoguan'&&o.svc)?'<div class="svc-tags">'+svcTagHTML(o.svc)+'</div>':'';
+  const dk=' data-k="'+[o.no,o.name,o.room,o.time,o.status,title,cat,o.svc||'',o.phone||''].join(' ').toLowerCase()+'"';
   return '<div class="order-item"'+dk+' onclick="openOrder(\''+o.detail+'\',\''+o.status+'\',\''+o.no+'\')">'
     +'<div class="oi-top">'+coverBox(cat)
     +'<div class="oi-info"><div class="oi-tline"><b class="oi-title">'+title+'</b><span class="tag '+tagCls+'">'+o.status+'</span></div>'
@@ -939,7 +939,7 @@ function applyTuoguanState(status){
   if(to){
     if(to.title)byId('tgTitle').textContent=to.title;
     if(to.time)byId('tgTime').textContent=to.time;
-    byId('tgSvcTags').innerHTML=svcTagsHTML(to.svc);
+    byId('tgSvcTags').innerHTML=svcTagHTML(to.svc);
   }
   byId('tgStatus').className='status-badge '+(done?'done':'doing');
   byId('tgStatus').textContent=status;
@@ -971,14 +971,14 @@ function finishTuoguan(){
 }
 /* ===== 托管：服务环节标签（接 / 送 / 看护）===== */
 const TG_SVC_CLS={'接':'blue','送':'mint','看护':'amber'};
-function svcTagsHTML(list){
-  return (list||[]).map(s=>'<span class="svc-tag '+(TG_SVC_CLS[s]||'blue')+'">'+s+'</span>').join('');
+function svcTagHTML(s){
+  return s?'<span class="svc-tag '+(TG_SVC_CLS[s]||'blue')+'">'+s+'</span>':'';
 }
 function tgOrder(no){
   const k=no||curOrder;
   return orders.tuoguan.find(x=>x.no===k)||orders.tuoguan[0];
 }
-function hasKanjia(no){const o=tgOrder(no);return !!(o&&(o.svc||[]).indexOf('看护')>-1)}
+function hasKanjia(no){const o=tgOrder(no);return !!(o&&o.svc==='看护')}
 /* ===== 托管：看护超时费（仅「看护」类型订单可用）===== */
 let tgTimeouts={},timeoutEdit=-1;
 const TG_TIMEOUT_RATE=30;
