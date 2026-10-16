@@ -231,6 +231,9 @@ body{
 .extra-item .ei-del:active{color:#FF5B5B}
 .fld-lbl{font-size:12px;font-weight:600;color:var(--txt);margin:0 0 8px}
 .fld-tip{font-size:11px;color:var(--sub);margin-top:8px;line-height:1.6}
+.seg{display:flex;gap:8px}
+.seg-btn{flex:1;padding:11px 8px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer}
+.seg-btn.on{border-color:#3AC99A;color:#1F8E6B;background:rgba(58,201,154,.1)}
 /* 托管服务类型标签（接 / 送 / 看护，一份订单只有一种） */
 .svc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;justify-content:center}
 .order-item .svc-tags{justify-content:flex-start;margin-top:7px}
@@ -786,11 +789,16 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
     <div class="sheet boardsheet">
       <div class="sheet-hd"><span class="hd-title" id="timeoutTitle">添加超时费</span><button class="hd-close" onclick="closeTimeout()">取消</button></div>
       <div style="padding:16px 18px 22px">
-        <div class="fld-lbl">超时时长（小时）</div>
-        <div class="field"><input id="timeoutHours" type="number" inputmode="decimal" step="0.5" placeholder="如 0.5" oninput="syncTimeoutAmt()"><span style="font-size:13px;color:var(--sub)">小时</span></div>
-        <div class="fld-lbl" style="margin-top:16px">超时费金额（元）</div>
+        <div class="fld-lbl">超时场次</div>
+        <div class="seg" id="timeoutPeriods">
+          <button class="seg-btn on" data-p="下半场" onclick="pickPeriod('下半场')">下半场</button>
+          <button class="seg-btn" data-p="晚上场" onclick="pickPeriod('晚上场')">晚上场</button>
+        </div>
+        <div class="fld-lbl" style="margin-top:16px">超时时长（小时）</div>
+        <div class="field"><input id="timeoutHours" type="number" inputmode="decimal" step="0.5" placeholder="如 1" oninput="syncTimeoutAmt()"><span style="font-size:13px;color:var(--sub)">小时</span></div>
+        <div class="fld-lbl" style="margin-top:16px">计费金额（元）</div>
         <div class="field"><span style="font-size:15px;font-weight:700">¥</span><input id="timeoutAmt" type="number" inputmode="decimal" placeholder="0.00"></div>
-        <div class="fld-tip">计费标准 ¥30/小时，按超时时长自动带出金额，可手动调整</div>
+        <div class="fld-tip">下半场 ¥30/小时 · 晚上场 ¥50/小时；按所选场次与时长自动带出金额，可手动调整</div>
         <button class="btn btn-primary" style="width:100%;margin-top:20px" onclick="saveTimeout()">保存</button>
       </div>
     </div>
@@ -981,7 +989,10 @@ function tgOrder(no){
 function hasKanjia(no){const o=tgOrder(no);return !!(o&&o.svc==='看护')}
 /* ===== 托管：看护超时费（仅「看护」类型订单可用）===== */
 let tgTimeouts={},timeoutEdit=-1;
-const TG_TIMEOUT_RATE=30;
+let timeoutPeriod='下半场';
+const TG_PERIODS=[{k:'下半场',rate:30},{k:'晚上场',rate:50}];
+function periodRate(p){const d0=TG_PERIODS.find(x=>x.k===p);return d0?d0.rate:30}
+function pickPeriod(p){timeoutPeriod=p;document.querySelectorAll('#timeoutPeriods .seg-btn').forEach(b=>b.classList.toggle('on',b.dataset.p===p));syncTimeoutAmt()}
 const ICON_CLOCK='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 2"/></svg>';
 function timeoutKey(){return curOrder||'_p07'}
 function timeoutsOf(){const k=timeoutKey();if(!tgTimeouts[k])tgTimeouts[k]=[];return tgTimeouts[k]}
@@ -998,33 +1009,35 @@ function renderTimeout(){
   box.innerHTML=list.length
     ? list.map((e,i)=>'<div class="extra-item tg-timeout-item"'+(done?'':' onclick="openTimeout('+i+')"')+'>'
         +'<div class="ei-th">'+ICON_CLOCK+'</div>'
-        +'<div class="ei-main"><div class="ei-name">超时 '+fmtHours(e.hours)+' 小时</div><div class="ei-sub">'
-        +(done?'本单超时费已随订单结算':'按 ¥'+TG_TIMEOUT_RATE+'/小时计费'+(done?'':' · 点击编辑'))+'</div></div>'
+        +'<div class="ei-main"><div class="ei-name">'+(e.period||'下半场')+' 超时 '+fmtHours(e.hours)+' 小时</div><div class="ei-sub">'
+        +(done?'本单超时费已随订单结算':'按 ¥'+periodRate(e.period)+'/小时计费'+(done?'':' · 点击编辑'))+'</div></div>'
         +'<div class="ei-amt">'+money(e.amt)+'</div>'
         +(done?'':'<button class="ei-del" onclick="event.stopPropagation();delTimeout('+i+')">删除</button>')+'</div>').join('')
     : '<div class="extra-empty"'+(done?'':' onclick="openTimeout(-1)"')+'><div class="ee-t">暂无超时费</div><div class="ee-s">'
-        +(done?'本单看护未超时，无超时费':'看护超出约定时间按 ¥'+TG_TIMEOUT_RATE+'/小时计费<br>点击此处添加超时时长与费用')+'</div></div>';
+        +(done?'本单看护未超时，无超时费':'按超时场次计费：下半场 ¥30/小时、晚上场 ¥50/小时<br>可选择场次并单独设置晚上超时的小时数与金额')+'</div></div>';
   byId('tgTimeoutTotal').textContent=money(list.reduce((s,e)=>s+Number(e.amt||0),0));
 }
 function openTimeout(i){
   if(byId('tgStatus').textContent==='已完成')return;
   timeoutEdit=i;
   const e=i>=0?timeoutsOf()[i]:null;
+  timeoutPeriod=(e&&e.period)||'下半场';
   byId('timeoutTitle').textContent=e?'编辑超时费':'添加超时费';
   byId('timeoutHours').value=e?e.hours:'';
   byId('timeoutAmt').value=e?e.amt:'';
+  document.querySelectorAll('#timeoutPeriods .seg-btn').forEach(b=>b.classList.toggle('on',b.dataset.p===timeoutPeriod));
   byId('timeoutOverlay').classList.add('show');
 }
 function closeTimeout(){byId('timeoutOverlay').classList.remove('show')}
 function syncTimeoutAmt(){
   const h=Number(byId('timeoutHours').value||0);
-  if(h>0)byId('timeoutAmt').value=(Math.round(h*TG_TIMEOUT_RATE*100)/100).toFixed(2);
+  if(h>0)byId('timeoutAmt').value=(Math.round(h*periodRate(timeoutPeriod)*100)/100).toFixed(2);
 }
 function saveTimeout(){
   const h=Number(byId('timeoutHours').value||0),a=Number(byId('timeoutAmt').value||0);
   if(!(h>0)){toast('请输入超时时长');byId('timeoutHours').focus();return}
   if(!(a>0)){toast('请输入超时费金额');byId('timeoutAmt').focus();return}
-  const list=timeoutsOf(),item={hours:h,amt:a};
+  const list=timeoutsOf(),item={period:timeoutPeriod,hours:h,amt:a};
   if(timeoutEdit>=0)list[timeoutEdit]=item;else list.push(item);
   const wasEdit=timeoutEdit>=0;
   closeTimeout();renderTimeout();toast(wasEdit?'超时费已更新':'超时费已添加');
